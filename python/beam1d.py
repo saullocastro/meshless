@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 class P(object):
     def __init__(self):
         self.rho = 5.e3

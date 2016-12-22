@@ -1,4 +1,7 @@
+from __future__ import division
+
 import numpy as np
+from scipy.spatial import cKDTree
 import matplotlib.pyplot as plt
 
 class P(object):
@@ -14,13 +17,15 @@ class P(object):
     """
     def __init__(self):
         self.rho = 5.e3
-
+        self.i = 0
+        self.j = 0
         #TODO use list of adjacent particles
         #TODO compute vector of positions among adjacent particles
-        self.p1 = None
-        self.p2 = None
-        self.p3 = None
-        self.p4 = None
+        # adjacent particles
+        self.padjs = []
+        # initial distances
+        self.dadjs = []
+
         self.E = 71e9
         self.nu = 0.33
         self.length = 0.01
@@ -28,7 +33,6 @@ class P(object):
         self.b = 0.01
         self.x = 0
         self.y = 0
-        self.pos_1 = np.array([0., 0.])
         self.pos = np.array([0., 0.])
 
         self.u_1 = np.array([0, 0.]) # 2-D u, v
@@ -37,12 +41,10 @@ class P(object):
         self.ut_1 = np.array([0, 0.]) # 2-D uxx, vxx, rzxx
         self.ut = np.array([0, 0.]) # 2-D uxx, vxx, rzxx
 
+        self.utt_1 = np.array([0, 0.]) # 2-D uxx, vxx, rzxx
         self.utt = np.array([0, 0.]) # 2-D uxx, vxx, rzxx
 
-        self.f1 = np.array([0., 0.]) # 2-D
-        self.f2= np.array([0., 0.]) # 2-D
-        self.f3= np.array([0., 0.]) # 2-D
-        self.f4= np.array([0., 0.]) # 2-D
+        self.f = np.array([0., 0.]) # 2-D
         self.fext = np.array([0, 0]) # 2-D
 
         self.build()
@@ -56,20 +58,23 @@ class P(object):
                            #[kvu, kvv]])
         #self.kinv = np.linalg.inv(self.k)
         # mass matrix
-        self.m = (self.length * self.A * self.rho * np.array([[1, 0],
-                                                              [0, 1]]))
+        self.m = self.length * self.A * self.rho
+
+    def __str__(self):
+        return 'P%d%d' % (self.i, self.j)
+    def __repr__(self):
+        return self.__str__()
 
 # building up particle connectivity
-lenx = 1000
+near = 4
+lenx = 200
 leny = 100
-size = 20
+size = 10
 numx = lenx//size
 numy = leny//size
 ps = [P() for _ in range(numx * numy)]
-psy0 = []
 
 for i in range(numx):
-    psy0.append(ps[i])
     for j in range(numy):
         #TODO update position x and y
         # recalculate force components among particles according to the
@@ -77,76 +82,76 @@ for i in range(numx):
         p = ps[j*numx + i]
         p.pos[0] = lenx*i/(numx-1)
         p.pos[1] = leny*j/(numy-1)
-        p.pos_1[:] = p.pos[:]
+        p.i = i
+        p.j = j
 
-for j in range(numy):
-    for i in range(numx-1):
-        ps[j*numx + i].p2 = ps[j*numx + i+1]
-        ps[j*numx + i+1].p1 = ps[j*numx + i]
-for i in range(numx):
-    for j in range(numy-1):
-        ps[i*numy + j].p4 = ps[i*numy + j+1]
-        ps[i*numy + j+1].p3 = ps[i*numy + j]
+posall = [p.pos for p in ps]
+tree = cKDTree(posall)
 
-fig =plt.gcf()
+for p in ps:
+    distvec, posvec = tree.query(p.pos, k=(near+1))
+    distvec = distvec[1:]
+    posvec = posvec[1:]
+    p.dadjs = distvec
+    p.padjs = [ps[i] for i in posvec]
+
+fig = plt.figure(dpi=500, figsize=(10, 10))
 fig.clear()
 ax = plt.gca()
-ax.set_xlim(-size, lenx+size)
-ax.set_ylim(-size, leny+size)
+#ax.set_xlim(-size, lenx+size)
+#ax.set_ylim(-size, leny+size)
 ax.plot([p.pos[0] for p in ps], [p.pos[1] for p in ps], 'ko')
 ax.set_aspect('equal')
 fig.savefig(filename='tmp_beam2d_points.png', bbox_inches='tight')
 
 # integration
-dt = 0.001
-n = 10000
+dt = 0.000001
+n = 500
 
-ps[-1].fext = np.array([0, 1])
+ps[-1].fext += [0, -1]
 
 for step in range(n):
-    for i in range(numx):
-        for j in range(numy):
-            p = ps[j*numx + j]
-            # clamping one side
-            if i in [0]:
-                p.u *= 0
-                p.v *= 0
+    for p in ps:
+        # forces
+        p.f *= 0
+        p.f += p.fext
+        dist_init = p.dadjs
+        for i, padj in enumerate(p.padjs):
+            pos_diff = p.pos - padj.pos
+            if pos_diff.sum() == 0:
                 continue
-            # forces
-            p.f *= 0
-            p.f += p.fext
-            #TODO use list of particles
-            #TODO finish this force and displacement calculation...
-            if p.p1:
-                p.f1 = p.k.dot(p.u_1 - p.p1.u_1)/2
-                vec1 = p.pos - p1.pos
-                d1 = (vec1**2).sum()**0.5
-                k1 = p.E * p.A / d1
-                p.u += p.f / k1
-            if p.p2:
-                p.f += p.k.dot(p.u_1 - p.p2.u_1)/2
-            if p.p3:
-                p.f += p.k.dot(p.u_1 - p.p3.u_1)/2
-            if p.p4:
-                p.f += p.k.dot(p.u_1 - p.p4.u_1)/2
+            dx = pos_diff[0]
+            dy = pos_diff[1]
+            d = (dx**2 + dy**2)**0.5
+            #TODO not considering area reduction with dist variation
+            k = p.E * p.A / dist_init[i]
+            #FIXME treat component-wise
+            fres = (d - dist_init[i]) * k
+            fx = fres * dy / d
+            fy = fres * dx / d
+            p.f += [fx, fy]
 
-            p.ut = (p.u - p.u_1)/dt
-            p.utt = (p.ut - p.ut_1)/dt
-            du = p.kinv.dot(p.f - p.m.dot(p.utt))
-            p.u = p.u_1 + du
+        p.u = p.u_1 + p.ut_1*dt + p.utt_1*dt**2
+        p.ut = p.ut_1 + p.utt_1*dt
+        p.utt = 1./p.m*p.f
+        if np.any(np.isnan(p.u)):
+            print p.u
+            raise
 
-            p.u_1 = p.u.copy()
-            p.ut_1 = p.ut.copy()
-            p.utt_1 = p.utt.copy()
+        p.u_1 = p.u.copy()
+        p.ut_1 = p.ut.copy()
+        p.utt_1 = p.utt.copy()
 
-plt.plot([p.u[1] for p in ps])
-plt.savefig(filename='tmp_beam2d.png')
+        # clamping one side
+        if p.i in [0]:
+            p.u_1 *= 0
+            p.ut_1 *= 0
+            p.utt_1 *= 0
+            p.u *= 0
+            p.ut *= 0
+            p.utt *= 0
 
+        p.pos += p.u
 
-    #self.u
-    #k x + m*d2x/dt2 = f
-    #f = k*x
-
-#u = u + du/dt * deltat
-
-
+ax.plot([p.pos[0] for p in ps], [p.pos[1] for p in ps], 'r^', mfc='None')
+fig.savefig(filename='tmp_beam2d_deformed.png', bbox_inches='tight')

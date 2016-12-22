@@ -50,20 +50,21 @@ class P(object):
 
     def build(self):
         self.A = self.h * self.b
-        kuu = self.E*self.A
-        kvv = self.E*self.A
-        self.k = np.array([[kuu, kuv],
-                           [kvu, kvv]])
-        self.kinv = np.linalg.inv(self.k)
+        #kuu = self.E*self.A
+        #kvv = self.E*self.A
+        #self.k = np.array([[kuu, kuv],
+                           #[kvu, kvv]])
+        #self.kinv = np.linalg.inv(self.k)
         # mass matrix
         self.m = (self.length * self.A * self.rho * np.array([[1, 0],
                                                               [0, 1]]))
 
 # building up particle connectivity
 lenx = 1000
-leny = 10
-numx = 100
-numy = 5
+leny = 100
+size = 20
+numx = lenx//size
+numy = leny//size
 ps = [P() for _ in range(numx * numy)]
 psy0 = []
 
@@ -87,6 +88,15 @@ for i in range(numx):
         ps[i*numy + j].p4 = ps[i*numy + j+1]
         ps[i*numy + j+1].p3 = ps[i*numy + j]
 
+fig =plt.gcf()
+fig.clear()
+ax = plt.gca()
+ax.set_xlim(-size, lenx+size)
+ax.set_ylim(-size, leny+size)
+ax.plot([p.pos[0] for p in ps], [p.pos[1] for p in ps], 'ko')
+ax.set_aspect('equal')
+fig.savefig(filename='tmp_beam2d_points.png', bbox_inches='tight')
+
 # integration
 dt = 0.001
 n = 10000
@@ -97,8 +107,10 @@ for step in range(n):
     for i in range(numx):
         for j in range(numy):
             p = ps[j*numx + j]
-            if i in (0, 1):
-                p.u *= 0 # clamping one side
+            # clamping one side
+            if i in [0]:
+                p.u *= 0
+                p.v *= 0
                 continue
             # forces
             p.f *= 0

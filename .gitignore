@@ -4,3 +4,8 @@ temp*
 tmp*.*
 temp*.*
 
+# Python compiled files
+*.pyc
+*.pyo
+*.pyd
+

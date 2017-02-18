@@ -1,14 +1,14 @@
 """
-Composite Matlamina Module (:mod:`meshfree.composite.matlamina`)
+Composite Matlamina Module (:mod:`pim.composite.matlamina`)
 ================================================================
 
-.. currentmodule:: meshfree.composite.matlamina
+.. currentmodule:: pim.composite.matlamina
 
 """
 import numpy as np
 
-from meshfree.constants import DOUBLE
-from meshfree.logger import error
+from pim.constants import DOUBLE
+from pim.logger import error
 
 
 class MatLamina(object):

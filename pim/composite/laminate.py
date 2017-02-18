@@ -1,8 +1,8 @@
 """
-Composite Laminate Module (:mod:`meshfree.composite.laminate`)
+Composite Laminate Module (:mod:`pim.composite.laminate`)
 ==============================================================
 
-.. currentmodule:: meshfree.composite.laminate
+.. currentmodule:: pim.composite.laminate
 
 """
 from __future__ import division, absolute_import
@@ -11,8 +11,8 @@ import numpy as np
 
 from .lamina import Lamina
 from .matlamina import read_laminaprop
-from meshfree.constants import DOUBLE
-from meshfree.logger import *
+from pim.constants import DOUBLE
+from pim.logger import error
 
 
 def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],

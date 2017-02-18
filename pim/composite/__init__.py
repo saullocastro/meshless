@@ -1,18 +1,18 @@
 r"""
 ============================================
-Composite Module (:mod:`meshfree.composite`)
+Composite Module (:mod:`pim.composite`)
 ============================================
 
-.. currentmodule:: meshfree.composite
+.. currentmodule:: pim.composite
 
-The ``meshfree.composite`` module includes functions used to calculate
+The ``pim.composite`` module includes functions used to calculate
 laminate properties based on input data of stacking sequence and lamina
 properties.
 
 The most convenient usage is probably using the
-:func:`meshfree.composite.laminate.read_stack()` function::
+:func:`pim.composite.laminate.read_stack()` function::
 
-    from meshfree.composite.laminate import read_stack
+    from pim.composite.laminate import read_stack
 
     laminaprop = (E11, E22, nu12, G12, G13, G23)
     plyt = ply_thickness
@@ -29,13 +29,13 @@ and when shear stiffnesses are required, the ``ABDE`` matrix, with
 
     >>> lam.ABDE
 
-.. automodule:: meshfree.composite.laminate
+.. automodule:: pim.composite.laminate
     :members:
 
-.. automodule:: meshfree.composite.lamina
+.. automodule:: pim.composite.lamina
     :members:
 
-.. automodule:: meshfree.composite.matlamina
+.. automodule:: pim.composite.matlamina
     :members:
 
 """

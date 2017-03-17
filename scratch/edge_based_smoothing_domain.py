@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import coo_matrix
 
-from meshfree.composite.laminate import read_stack
-from meshfree.sparse import solve
+from pim.composite.laminate import read_stack
+from pim.sparse import solve
 
 XGLOBAL = np.array([1., 0, 0])
 YGLOBAL = np.array([0, 1., 0])

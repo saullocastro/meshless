@@ -195,7 +195,7 @@ Bb = 1/Ac * (
              ZERO,
              nx1*sphix1,
              ny1*sphiy1,
-             -ny1*sphix1 + nx1*sphiy1,
+             ny1*sphix1 + nx1*sphiy1,
              ZERO,
              ZERO])
    + le2*Matrix([ZERO,
@@ -203,7 +203,7 @@ Bb = 1/Ac * (
              ZERO,
              nx2*sphix2,
              ny2*sphiy2,
-             -ny2*sphix2 + nx2*sphiy2,
+             ny2*sphix2 + nx2*sphiy2,
              ZERO,
              ZERO])
    + le3*Matrix([ZERO,
@@ -211,7 +211,7 @@ Bb = 1/Ac * (
              ZERO,
              nx3*sphix3,
              ny3*sphiy3,
-             -ny3*sphix3 + nx3*sphiy3,
+             ny3*sphix3 + nx3*sphiy3,
              ZERO,
              ZERO])
    + le4*Matrix([ZERO,
@@ -219,22 +219,26 @@ Bb = 1/Ac * (
              ZERO,
              nx4*sphix4,
              ny4*sphiy4,
-             -ny4*sphix4 + nx4*sphiy4,
+             ny4*sphix4 + nx4*sphiy4,
              ZERO,
              ZERO])
    )
 
-K = (Ac*Bm.transpose() * A * Bm
-    + Ac*Bm.transpose() * B * Bb
-    + Ac*Bb.transpose() * B * Bm
-    + Ac*Bb.transpose() * D * Bb)
+K = Ac*(Bm.transpose() * A * Bm
+      + Bm.transpose() * B * Bb
+      + Bb.transpose() * B * Bm
+      + Bb.transpose() * D * Bb)
 
-print_as_full(sympy.simplify(K), 'k0', dofpernode=5)
+print_as_full(K, 'k0', dofpernode=5)
+#print_as_full(sympy.simplify(K), 'k0', dofpernode=5)
 
 # transverse shear terms
 
-sympy.var('a, b, c, d, Ae, k')
+sympy.var('Ac1, Ac2')
+
+sympy.var('a, b, c, d, Ae')
 Bs = 1/(2*Ae)*Matrix([
+     #node1           #node 2         #other1
   [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
@@ -244,8 +248,37 @@ Bs = 1/(2*Ae)*Matrix([
   [0, 0, b-d, Ae,  0,   0, 0,  d,  a*d/2,  b*d/2,   0, 0, -b, -b*c/2, -b*d/2],
   [0, 0, c-a,  0, Ae,   0, 0, -c, -a*c/2, -b*c/2,   0, 0,  a,  a*c/2,  a*d/2]])
 
-K = Bs.transpose() * (k*E) * Bs
+sympy.var('a1, b1, c1, d1, Ae1')
+sympy.var('a2, b2, c2, d2, Ae2')
+Bs1 = 1/(2*Ae1)*Matrix([
+     #node1           #node 2         #other1           #other2
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0],
+  [0, 0, b1-d1, Ae1,  0,   0, 0,  d1,  a1*d1/2,  b1*d1/2,   0, 0, -b1, -b1*c1/2, -b1*d1/2,  0, 0, 0, 0, 0],
+  [0, 0, c1-a1,  0, Ae1,   0, 0, -c1, -a1*c1/2, -b1*c1/2,   0, 0,  a1,  a1*c1/2,  a1*d1/2,  0, 0, 0, 0, 0]])
+Bs2 = 1/(2*Ae2)*Matrix([
+     #node1           #node 2         #other1           #other2
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0,   0, 0, 0, 0, 0,   0, 0, 0, 0, 0,  0, 0, 0, 0, 0],
+  [0, 0, b2-d2, Ae2,  0,   0, 0,  d2,  a2*d2/2,  b2*d2/2,   0, 0, 0, 0, 0,   0, 0, -b2, -b2*c2/2, -b2*d2/2],
+  [0, 0, c2-a2,  0, Ae2,   0, 0, -c2, -a2*c2/2, -b2*c2/2,   0, 0, 0, 0, 0,   0, 0,  a2,  a2*c2/2,  a2*d2/2]])
+
+K = Bs.transpose()*E*Bs
 print_as_full(sympy.simplify(K), 'k0s', dofpernode=5)
+
+Bsk = Ac1/Ac*Bs1 + Ac2/Ac*Bs2
+K = Bsk.transpose()*E*Bsk
+
+print_as_full(sympy.simplify(K), 'k0s12', dofpernode=5)
+
 
 
 

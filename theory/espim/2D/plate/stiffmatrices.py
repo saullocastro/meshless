@@ -140,18 +140,18 @@ Bm = 1/Ac * (
 # MATRIX FORM - bending
 #      exx eyy gxy kxx kyy kxy gxz gyz
 Bb = 1/Ac * (
-     le1*Matrix([+nx1*sphix1,
-                 +ny1*sphiy1,
-                 +ny1*sphix1 + nx1*sphiy1])
-   + le2*Matrix([+nx2*sphix2,
-                 +ny2*sphiy2,
-                 +ny2*sphix2 + nx2*sphiy2])
-   + le3*Matrix([+nx3*sphix3,
-                 +ny3*sphiy3,
-                 +ny3*sphix3 + nx3*sphiy3])
-   + le4*Matrix([+nx4*sphix4,
-                 +ny4*sphiy4,
-                 +ny4*sphix4 + nx4*sphiy4])
+     le1*Matrix([nx1*sphix1,
+                 ny1*sphiy1,
+                 ny1*sphix1 + nx1*sphiy1])
+   + le2*Matrix([nx2*sphix2,
+                 ny2*sphiy2,
+                 ny2*sphix2 + nx2*sphiy2])
+   + le3*Matrix([nx3*sphix3,
+                 ny3*sphiy3,
+                 ny3*sphix3 + nx3*sphiy3])
+   + le4*Matrix([nx4*sphix4,
+                 ny4*sphiy4,
+                 ny4*sphix4 + nx4*sphiy4])
    )
 
 K = Ac*(Bm.transpose() * A * Bm

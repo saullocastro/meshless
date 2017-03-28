@@ -177,7 +177,7 @@ def make_skew_symmetric(m):
     return coo_matrix((v, (r, c)), shape=m.shape, dtype=m.dtype)
 
 
-def is_symmetric(m):
+def is_symmetric(m, rtol=1.e-5, atol=1.e-6):
     """Check if a sparse matrix is symmetric
 
     Parameters
@@ -216,7 +216,7 @@ def is_symmetric(m):
     vl = vl[sortl]
     vu = vu[sortu]
 
-    check = np.allclose(vl, vu)
+    check = np.allclose(vl, vu, rtol=rtol, atol=atol)
 
     return check
 

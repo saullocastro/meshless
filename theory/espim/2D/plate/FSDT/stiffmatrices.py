@@ -138,7 +138,7 @@ Bm = 1/Ac * (
    )
 
 # MATRIX FORM - bending
-#      exx eyy gxy kxx kyy kxy gxz gyz
+
 Bb = 1/Ac * (
      le1*Matrix([nx1*sphix1,
                  ny1*sphiy1,

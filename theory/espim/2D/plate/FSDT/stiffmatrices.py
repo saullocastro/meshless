@@ -154,6 +154,23 @@ Bb = 1/Ac * (
                  ny4*sphix4 + nx4*sphiy4])
    )
 
+# MATRIX FORM - shear
+
+Bs = 1/Ac * (
+     le1*Matrix([nx1*sphix1,
+                 ny1*sphiy1,
+                 ny1*sphix1 + nx1*sphiy1])
+   + le2*Matrix([nx2*sphix2,
+                 ny2*sphiy2,
+                 ny2*sphix2 + nx2*sphiy2])
+   + le3*Matrix([nx3*sphix3,
+                 ny3*sphiy3,
+                 ny3*sphix3 + nx3*sphiy3])
+   + le4*Matrix([nx4*sphix4,
+                 ny4*sphiy4,
+                 ny4*sphix4 + nx4*sphiy4])
+   )
+
 K = Ac*(Bm.transpose() * A * Bm
       + Bm.transpose() * B * Bb
       + Bb.transpose() * B * Bm
@@ -167,41 +184,65 @@ print_as_full(K, 'k0', dofpernode=5)
 sympy.var('a1, b1, c1, d1, Ac1')
 sympy.var('a2, b2, c2, d2, Ac2')
 sympy.var('a3, b3, c3, d3, Ac3')
-Bs1 = 1/(2*Ac1)*(Matrix([
-         #node1                       node 2                      node 3
-  [0, 0, 0, 0, 0,   0, 0,  d1,  a1*d1/2,  b1*d1/2,    0, 0, -b1, -b1*c1/2, -b1*d1/2   ],
-  [0, 0, 0, 0, 0,   0, 0, -c1, -a1*c1/2, -b1*c1/2,    0, 0,  a1,  a1*c1/2,  a1*d1/2   ]])
-
-  +
-
-  1/3*Matrix([[0, 0, b1-d1, Ac1,  0,    0, 0, b1-d1, Ac1,  0,    0, 0, b1-d1, Ac1,  0],
-              [0, 0, c1-a1,  0, Ac1,    0, 0, c1-a1,  0, Ac1,    0, 0, c1-a1,  0, Ac1]])
-      )
-
-Bs2 = 1/(2*Ac2)*(Matrix([
-         #node1                         node 2                      node 3
-  [0, 0, b2-d2, Ac2,  0,       0, 0,  d2,  a2*d2/2,  b2*d2/2,    0, 0, 0, 0, 0  ],
-  [0, 0, c2-a2,  0, Ac2,       0, 0, -c2, -a2*c2/2, -b2*c2/2,    0, 0, 0, 0, 0  ]])
-
-  +
-
-  1/3*Matrix([[0, 0, -b2, -b2*c2/2, -b2*d2/2,    0, 0, -b2, -b2*c2/2, -b2*d2/2,    0, 0, -b2, -b2*c2/2, -b2*d2/2],
-              [0, 0,  a2,  a2*c2/2,  a2*d2/2,    0, 0,  a2,  a2*c2/2,  a2*d2/2,    0, 0,  a2,  a2*c2/2,  a2*d2/2]])
-      )
-
-Bs3 = 1/(2*Ac3)*(Matrix([
-         #node1                node 2                    node 3
-  [0, 0, b3-d3, Ac3,  0,   0, 0, 0, 0, 0,    0, 0, -b3, -b3*c3/2, -b3*d3/2   ],
-  [0, 0, c3-a3,  0, Ac3,   0, 0, 0, 0, 0,    0, 0,  a3,  a3*c3/2,  a3*d3/2   ]])
-
-  +
-
-  1/3*Matrix([[0, 0,  d3,  a3*d3/2,  b3*d3/2,    0, 0,  d3,  a3*d3/2,  b3*d3/2,    0, 0,  d3,  a3*d3/2,  b3*d3/2],
-              [0, 0, -c3, -a3*c3/2, -b3*c3/2,    0, 0, -c3, -a3*c3/2, -b3*c3/2,    0, 0, -c3, -a3*c3/2, -b3*c3/2]])
-      )
 
 
-Bs = 1/Ac*(Ac1*Bs1 + Ac2*Bs2 + Ac3*Bs3)
+Bs1Tria1 = 1/(2*Ac1) * Matrix([
+         #mid
+  [0, 0, b1-d1, Ac1,  0],
+  [0, 0, c1-a1,  0, Ac1]])
+
+Bs2Tria1 = 1/(2*Ac1) * Matrix([
+         #node 1
+  [0, 0,  d1,  a1*d1/2,  b1*d1/2],
+  [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
+
+Bs3Tria1 = 1/(2*Ac1) * Matrix([
+         #node 2
+  [0, 0, -b1, -b1*c1/2, -b1*d1/2],
+  [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
+
+
+
+Bs1Tria2 = 1/(2*Ac2) * Matrix([
+         #mid
+  [0, 0, b2-d2, Ac2,  0],
+  [0, 0, c2-a2,  0, Ac2]])
+
+Bs2Tria2 = 1/(2*Ac2) * Matrix([
+         #node 2
+  [0, 0,  d2,  a2*d2/2,  b2*d2/2],
+  [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
+
+Bs3Tria2 = 1/(2*Ac2) * Matrix([
+         #node 3
+  [0, 0, -b2, -b2*c2/2, -b2*d2/2],
+  [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
+
+
+
+Bs1Tria3 = 1/(2*Ac3) * Matrix([
+         #mid
+  [0, 0, b3-d3, Ac3,  0],
+  [0, 0, c3-a3,  0, Ac3]])
+
+Bs2Tria3 = 1/(2*Ac3) * Matrix([
+         #node 3
+  [0, 0,  d3,  a3*d3/2,  b3*d3/2],
+  [0, 0, -c3, -a3*c3/2, -b3*c3/2]])
+
+Bs3Tria3 = 1/(2*Ac3) * Matrix([
+         #node 1
+  [0, 0, -b3, -b3*c3/2, -b3*d3/2],
+  [0, 0,  a3,  a3*c3/2,  a3*d3/2]])
+
+
+BsTria1 = Matrix([1/3*Bs1Tria1.T + Bs2Tria1.T, 1/3*Bs1Tria1.T + Bs3Tria1.T, 1/3*Bs1Tria1.T]).T
+
+BsTria2 = Matrix([1/3*Bs1Tria2.T, 1/3*Bs1Tria2.T + Bs2Tria2.T, 1/3*Bs1Tria2.T + Bs3Tria2.T]).T
+
+BsTria3 = Matrix([1/3*Bs1Tria3.T + Bs3Tria3.T, 1/3*Bs1Tria3.T, 1/3*Bs1Tria3.T + Bs2Tria3.T]).T
+
+Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2 + Ac3*BsTria3)
 
 K = Ac*Bs.transpose()*E*Bs
 print_as_full(K, 'k0s', dofpernode=5)

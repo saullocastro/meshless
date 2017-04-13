@@ -3,7 +3,6 @@ from sympy import Matrix
 
 from pim.sympytools import print_as_sparse, print_as_array, print_as_full
 
-sympy.var('u, v, w, phix, phiy')
 sympy.var('nx1, ny1')
 sympy.var('nx2, ny2')
 sympy.var('nx3, ny3')
@@ -17,43 +16,6 @@ sympy.var('B11, B12, B16, B22, B26, B66')
 sympy.var('D11, D12, D16, D22, D26, D66')
 sympy.var('G44, G45, G55')
 sympy.var('le1, le2, le3, le4, Ac')
-
-# approximation for linear interpolation within a tria
-# u = u1*f1 + u2*f2 + u3*f3
-# v = v1*f1 + v2*f2 + v3*f3
-# w = w1*f1 + w2*f2 + w3*f3
-# phix = phix1*f1 + phix2*f2 + phix3*f3
-# phiy = phiy1*f1 + phiy2*f2 + phiy3*f3
-
-# in matrix form
-# u =    [f1, 0, 0, 0, 0, f2, 0, 0, 0, 0, f3, 0, 0, 0, 0] * [u1, v1, w1, phix1, phiy1, u2, v2, ... , u5, v5, w5, phix5, phiy5]
-# v =    [0, f1, 0, 0, 0, 0, f2, 0, 0, 0, 0, f3, 0, 0, 0] *   ||
-# w =    [0, 0, f1, 0, 0, 0, 0, f2, 0, 0, 0, 0, f3, 0, 0] *   ||
-# phix = [0, 0, 0, f1, 0, 0, 0, 0, f2, 0, 0, 0, 0, f3, 0] *   ||
-# phiy = [0, 0, 0, 0, f1, 0, 0, 0, 0, f2, 0, 0, 0, 0, f3] *   ||
-
-# u = f1 + x*f2 + y+f3
-# u = [1, x, y].T*[f1, f2, f3]
-# a = (inv(P) * unodes)
-# u = [1, x, y] * inv(P) * unodes
-
-# s = 0
-# sympy.var('x1, y1, x2, y2, x3, y3')
-# sympy.var('p11, p12, p13, p21, p22, p23, p31, p32, p33')
-# P = Matrix([[1, x1, y1],
-            # [1, x2, y2],
-            # [1, x3, y3]])
-# Pinv = Matrix([[p11, p12, p13],
-               # [p21, p22, p23],
-               # [p31, p32, p33]])
-# s = [-1, +1]
-# s = -1 : x = xa, y = xa
-# s = +1 : x = xb, y = xb
-# sympy.var('x, y')
-# sympy.var('xa, ya, xb, yb')
-# x = (xa*(1-s) + xb*(s+1))/2
-# y = (ya*(1-s) + yb*(s+1))/2
-# f1, f2, f3 = Matrix([[1, x, y]]) * Pinv
 
 su1 =    Matrix([[f11, 0, 0, 0, 0, f12, 0, 0, 0, 0, f13, 0, 0, 0, 0, f14, 0, 0, 0, 0]])
 sv1 =    Matrix([[0, f11, 0, 0, 0, 0, f12, 0, 0, 0, 0, f13, 0, 0, 0, 0, f14, 0, 0, 0]])
@@ -94,33 +56,8 @@ D = Matrix([[D11, D12, D16],
 G = Matrix([[G44, G45],
             [G45, G55]])
 
-# strains
-# exx = u,x              # membrane
-# eyy = v,y              # membrane
-# gxy = u,y + v,x        # membrane
-# gxz = w,x + phix       # membrane transverse shear
-# gyz = w,y + phiy       # membrane transverse shear
-# kxx = phix,x           # bending
-# kyy = phiy,y           # bending
-# kxy = phix,y + phiy,x  # bending
 
-# for strain smoothing it will be, after applying divergence theorem
-# cexx = u              # membrane
-# ceyy = v              # membrane
-# cgxy = u + v          # membrane
-# ckxx = phix           # bending
-# ckyy = phiy           # bending
-# ckxy = phix + phiy    # bending
-
-# transverse shear treated differently, by discrete shear gap (DSG)
-# cgxz = w,x + phix       # membrane transverse shear
-# cgyz = w,y + phiy       # membrane transverse shear
-
-# exx eyy gxy kxx kyy kxy gxz gyz (8 strain components)
-# dof = 5 for FSDT (u, v, w, phix, phiy)
-# Bm, Bb matrices are 8 strain components x (N x dof)
-
-# MATRIX FORM - membrane
+# membrane
 
 Bm = 1/Ac * (
      le1*Matrix([nx1*su1,
@@ -137,7 +74,7 @@ Bm = 1/Ac * (
                  ny4*su4 + nx4*sv4])
    )
 
-# MATRIX FORM - bending
+# bending
 
 Bb = 1/Ac * (
      le1*Matrix([nx1*sphix1,
@@ -161,7 +98,6 @@ K = Ac*(Bm.transpose() * A * Bm
       + Bb.transpose() * D * Bb)
 
 print_as_full(K, 'k0', dofpernode=5)
-#print_as_full(sympy.simplify(K), 'k0', dofpernode=5)
 
 # transverse shear terms
 
@@ -230,12 +166,4 @@ Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2 + Ac3*BsTria3)
 
 K = Ac*Bs.transpose()*G*Bs
 print_as_full(K, 'k0s', dofpernode=5)
-
-
-
-
-
-
-
-
 

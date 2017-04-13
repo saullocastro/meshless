@@ -1,8 +1,8 @@
 ES-PIM with Discrete Shear Gap (DSG), Implementation #1
-===
+=======================================================
 
 References
----
+----------
 
 Membrane and Bending strains::
 
@@ -18,7 +18,7 @@ Transverse shear strains::
 
 
 Theories implemented
----
+--------------------
 
 Strain components::
 

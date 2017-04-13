@@ -1,8 +1,8 @@
 """
-Composite Lamina Module (:mod:`pim.composite.lamina`)
+Composite Lamina Module (:mod:`meshless.composite.lamina`)
 ==========================================================
 
-.. currentmodule:: pim.composite.lamina
+.. currentmodule:: meshless.composite.lamina
 
 """
 from __future__ import division, absolute_import
@@ -10,7 +10,7 @@ from __future__ import division, absolute_import
 import numpy as np
 from numpy import cos, sin
 
-from pim.constants import DOUBLE
+from meshless.constants import DOUBLE
 from .matlamina import MatLamina
 
 

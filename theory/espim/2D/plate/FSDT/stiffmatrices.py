@@ -15,7 +15,7 @@ sympy.var('f41, f42, f43, f44')
 sympy.var('A11, A12, A16, A22, A26, A66')
 sympy.var('B11, B12, B16, B22, B26, B66')
 sympy.var('D11, D12, D16, D22, D26, D66')
-sympy.var('E44, E45, E55')
+sympy.var('G44, G45, G55')
 sympy.var('le1, le2, le3, le4, Ac')
 
 # approximation for linear interpolation within a tria
@@ -91,8 +91,8 @@ D = Matrix([[D11, D12, D16],
             [D12, D22, D26],
             [D16, D26, D66]])
 
-E = Matrix([[E44, E45],
-            [E45, E55]])
+G = Matrix([[G44, G45],
+            [G45, G55]])
 
 # strains
 # exx = u,x              # membrane
@@ -244,7 +244,7 @@ BsTria3 = Matrix([1/3*Bs1Tria3.T + Bs3Tria3.T, 1/3*Bs1Tria3.T, 1/3*Bs1Tria3.T + 
 
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2 + Ac3*BsTria3)
 
-K = Ac*Bs.transpose()*E*Bs
+K = Ac*Bs.transpose()*G*Bs
 print_as_full(K, 'k0s', dofpernode=5)
 
 

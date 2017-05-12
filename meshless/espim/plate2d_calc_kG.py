@@ -18,15 +18,15 @@ def calc_kG(d, edges, prop_from_node):
         Ac = edge.Ac
         ipts = edge.ipts
         mid1 = getMid(tria1)
-        tmp = [mid1, edge.n2, edge.n1]
-        Ac1 = area_of_polygon([n.pos[0] for n in tmp], [n.pos[1] for n in tmp])
+        tmp = np.array([mid1, edge.n2.xyz, edge.n1.xyz])
+        Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
         if len(edge.trias) == 1:
             tria2 = None
         elif len(edge.trias) == 2:
             tria2 = edge.trias[1]
             mid2 = getMid(tria2)
-            tmp = [mid2, edge.n1, edge.n2]
-            Ac2 = area_of_polygon([n.pos[0] for n in tmp], [n.pos[1] for n in tmp])
+            tmp = np.array([mid2, edge.n1.xyz, edge.n2.xyz])
+            Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
         else:
             raise RuntimeError('Found %d trias for edge' % len(edge.trias))
         indices = set()
@@ -36,13 +36,13 @@ def calc_kG(d, edges, prop_from_node):
             indices.add(ipt.n3.index)
         indices = sorted(list(indices))
         if len(ipts) == 3:
-            indices.append(-1) # fourth dummy index
+            indices.append(0) # fourth dummy index
         indexpos = dict([[ind, i] for i, ind in enumerate(indices)])
         i1, i2, i3, i4 = indices
-        f1 = [0, 0, 0, 0]
-        f2 = [0, 0, 0, 0]
-        f3 = [0, 0, 0, 0]
-        f4 = [0, 0, 0, 0]
+        f1 = np.array([0, 0, 0, 0])
+        f2 = np.array([0, 0, 0, 0])
+        f3 = np.array([0, 0, 0, 0])
+        f4 = np.array([0, 0, 0, 0])
 
         nx1 = ipts[0].nx
         ny1 = ipts[0].ny
@@ -112,7 +112,8 @@ def calc_kG(d, edges, prop_from_node):
         d4 = d[i4*dof: i4*dof+5]
         # d1... are [4, 4] [4, 5]
 
-        d = np.dot([f1, f2, f3, f4], [d1, d2, d3, d4])
+        print(f1, f2, f3, f4, d1, d2, d3, d4)
+        d = np.dot(np.array([f1, f2, f3, f4]), np.array([d1, d2, d3, d4]))
         # d is [4, 5]
 
         u_c = d[:, 0]

@@ -1,8 +1,10 @@
+from __future__ import absolute_import, division
+
 import numpy as np
-from scipy.sparse import coo_matrix, csr_matrix, csc_matrix
+from scipy.sparse import coo_matrix, csr_matrix
 from scipy.sparse.linalg import spsolve
 
-from compmech.logger import *
+from .logger import msg
 
 
 def remove_null_cols(*args, **kwargs):
@@ -24,7 +26,7 @@ def remove_null_cols(*args, **kwargs):
     """
     silent = kwargs.get('silent', False)
     args = list(args)
-    log('Removing null columns...', level=3, silent=silent)
+    msg('Removing null columns...', level=3, silent=silent)
     num_cols = args[0].shape[1]
 
     if isinstance(args[0], csr_matrix):
@@ -45,9 +47,9 @@ def remove_null_cols(*args, **kwargs):
         m = m[:, used_cols]
         args[i] = m
     args.append(used_cols)
-    log('{} columns removed'.format(num_cols - used_cols.shape[0]),
+    msg('{} columns removed'.format(num_cols - used_cols.shape[0]),
             level=4, silent=silent)
-    log('finished!', level=3, silent=silent)
+    msg('finished!', level=3, silent=silent)
 
     return args
 
@@ -66,7 +68,7 @@ def solve(a, b, silent=False, **kwargs):
     b : scipy sparse matrix
         The matrix or vector representing the right hand side of the equation.
     silent : bool, optional
-        A boolean to tell whether the log messages should be printed.
+        A boolean to tell whether the msg messages should be printed.
     kwargs : keyword arguments, optional
         Other arguments directly passed to :func:`spsolve`.
 

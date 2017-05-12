@@ -2,6 +2,7 @@ version.py
 # Build related
 build
 dist
+.coverage
 *.egg-info
 # Temp files
 tmp*

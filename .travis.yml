@@ -24,6 +24,7 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy sympy scipy
   - source activate test-environment
   - pip install pytest
+  - pip install coveralls
   - git clone https://github.com/SteveDoyle2/pyNastran.git
   - cd pyNastran
   - python setup_no_gui.py install
@@ -32,7 +33,8 @@ install:
   - python setup.py install
 
 script:
-  - py.test
+  - coverage run --source meshless -m py.test
+  - coverage report
 
 after_success:
   - coveralls

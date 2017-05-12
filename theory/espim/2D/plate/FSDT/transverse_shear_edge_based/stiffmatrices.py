@@ -103,89 +103,46 @@ print_as_full(K, 'k0', dofpernode=5)
 
 sympy.var('a1, b1, c1, d1, Ac1')
 sympy.var('a2, b2, c2, d2, Ac2')
-sympy.var('a3, b3, c3, d3, Ac3')
 
 
 Bs1Tria1 = 1/(2*Ac1) * Matrix([
-         #mid
+         #mid 1
   [0, 0, b1-d1, Ac1,  0],
   [0, 0, c1-a1,  0, Ac1]])
 
 Bs2Tria1 = 1/(2*Ac1) * Matrix([
-         #node 1
+         #node 2
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
 Bs3Tria1 = 1/(2*Ac1) * Matrix([
-         #node 2
+         #node 1
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
 
-
 Bs1Tria2 = 1/(2*Ac2) * Matrix([
-         #mid
+         #mid 2
   [0, 0, b2-d2, Ac2,  0],
   [0, 0, c2-a2,  0, Ac2]])
 
 Bs2Tria2 = 1/(2*Ac2) * Matrix([
-         #node 2
+         #node 1
   [0, 0,  d2,  a2*d2/2,  b2*d2/2],
   [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
 
 Bs3Tria2 = 1/(2*Ac2) * Matrix([
-         #node 3
+         #node 2
   [0, 0, -b2, -b2*c2/2, -b2*d2/2],
   [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
 
 
+ZERO = Bs1Tria1*0
+                       #node 1               ,             node 2         ,    other 1    ,     other 2
+BsTria1 = Matrix([1/3*Bs1Tria1.T + Bs3Tria1.T, 1/3*Bs1Tria1.T + Bs2Tria1.T, 1/3*Bs1Tria1.T,     ZERO.T    ]).T
+BsTria2 = Matrix([1/3*Bs1Tria2.T + Bs2Tria2.T, 1/3*Bs1Tria2.T + Bs3Tria2.T,    ZERO.T     , 1/3*Bs1Tria2.T]).T
 
-Bs1Tria3 = 1/(2*Ac3) * Matrix([
-         #mid
-  [0, 0, b3-d3, Ac3,  0],
-  [0, 0, c3-a3,  0, Ac3]])
-
-Bs2Tria3 = 1/(2*Ac3) * Matrix([
-         #node 3
-  [0, 0,  d3,  a3*d3/2,  b3*d3/2],
-  [0, 0, -c3, -a3*c3/2, -b3*c3/2]])
-
-Bs3Tria3 = 1/(2*Ac3) * Matrix([
-         #node 1
-  [0, 0, -b3, -b3*c3/2, -b3*d3/2],
-  [0, 0,  a3,  a3*c3/2,  a3*d3/2]])
-
-
-BsTria1 = Matrix([1/3*Bs1Tria1.T + Bs2Tria1.T, 1/3*Bs1Tria1.T + Bs3Tria1.T, 1/3*Bs1Tria1.T]).T
-
-BsTria2 = Matrix([1/3*Bs1Tria2.T, 1/3*Bs1Tria2.T + Bs2Tria2.T, 1/3*Bs1Tria2.T + Bs3Tria2.T]).T
-
-BsTria3 = Matrix([1/3*Bs1Tria3.T + Bs3Tria3.T, 1/3*Bs1Tria3.T, 1/3*Bs1Tria3.T + Bs2Tria3.T]).T
-
-Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2 + Ac3*BsTria3)
+Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
 
 K = Ac*Bs.transpose()*G*Bs
 print_as_full(K, 'k0s', dofpernode=5)
-
-
-
-# Geometric stiffness matrix
-
-Bmbuck = 1/Ac * (
-     le1*Matrix([nx1*sw1,
-                 ny1*sw1])
-   + le2*Matrix([nx2*sw2,
-                 ny2*sw2])
-   + le3*Matrix([nx3*sw3,
-                 ny3*sw3])
-   + le4*Matrix([nx4*sw4,
-                 ny4*sw4])
-   )
-
-
-sympy.var('Nxx, Nxy, Nyy')
-N = Matrix([[Nxx, Nxy],
-            [Nxy, Nyy]])
-kG = Ac*(Bmbuck.transpose() * N * Bmbuck)
-
-print_as_full(kG, 'kG', dofpernode=5)

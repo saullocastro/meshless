@@ -1,8 +1,14 @@
+version.py
+# Build related
+build
+dist
+*.egg-info
 # Temp files
 tmp*
 temp*
 tmp*.*
 temp*.*
+.cache
 
 # Python compiled files
 *.pyc

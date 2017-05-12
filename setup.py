@@ -26,7 +26,7 @@ setup(
         "Topic :: Scientific/Engineering :: Mathematics",
         "License :: OSI Approved :: BSD License",
     ],
-    install_requires=["numpy", "scipy"],
+    install_requires=["numpy", "scipy", "coveralls"],
 )
 
 with open("./meshless/version.py", "wb") as f:

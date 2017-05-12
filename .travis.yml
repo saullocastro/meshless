@@ -28,6 +28,7 @@ install:
   - cd pyNastran
   - python setup_no_gui.py install
   - cd ..
+  - rm -rf ./pyNastran
   - python setup.py install
 
 script:

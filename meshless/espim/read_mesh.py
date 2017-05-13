@@ -2,6 +2,8 @@ from collections import defaultdict
 
 from pyNastran.bdf.bdf import read_bdf, CTRIA3
 
+from ..logger import msg
+
 
 class Edge(object):
     def __init__(self, n1, n2):
@@ -29,8 +31,8 @@ def getMid(tria):
     return tria.get_node_positions().mean(axis=0)
 
 
-def read_mesh(filepath):
-    print('Reading mesh...')
+def read_mesh(filepath, silent=True):
+    msg('Reading mesh...', silent=silent)
     mesh = read_bdf(filepath, debug=False)
     nodes = []
     for node in mesh.nodes.values():
@@ -67,5 +69,5 @@ def read_mesh(filepath):
         for edge in tria.edges:
             node.edges.add(edge)
 
-    print('finished!')
+    msg('finished!', silent=silent)
     return nodes, trias, edges

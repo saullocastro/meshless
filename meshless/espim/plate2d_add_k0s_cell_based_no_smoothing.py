@@ -2,11 +2,12 @@ from __future__ import absolute_import, division
 
 import numpy as np
 
+from ..logger import msg
 from ..constants import ZGLOBAL
 
 
-def add_k0s(k0, trias, prop_from_node):
-    print('Adding K0s to K0...')
+def add_k0s(k0, trias, prop_from_node, silent=True):
+    msg('Adding K0s to K0...', silent=silent)
     dof = 5
     for tria in trias:
         # n1 -> n2 -> n3 -> n1
@@ -124,5 +125,5 @@ def add_k0s(k0, trias, prop_from_node):
         k0[i3*dof+4, i3*dof+3] += a1*c1*(-G45*b1*d1/4 + G55*a1*d1/4)/(4*Ac) - b1*c1*(-G44*b1*d1/4 + G45*a1*d1/4)/(4*Ac)
         k0[i3*dof+4, i3*dof+4] += a1*d1*(-G45*b1*d1/4 + G55*a1*d1/4)/(4*Ac) - b1*d1*(-G44*b1*d1/4 + G45*a1*d1/4)/(4*Ac)
 
-    print('finished!')
+    msg('finished!', silent=silent)
     return k0

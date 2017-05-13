@@ -1,7 +1,7 @@
 INIT MASTER(S)
 NASTRAN SYSTEM(442)=-1,SYSTEM(319)=1
 ID temp,Femap
-SOL SESTATIC
+SOL 105
 CEND
   TITLE = NX Nastran Static Analysis Set
   ECHO = NONE
@@ -15,7 +15,16 @@ SUBCASE 2
 SUBCASE 3
   SPC = 2
   LOAD = 3
+SUBCASE 4
+  SPC = 10
+  LOAD = 10
+SUBCASE 5
+  SPC = 10
+  LOAD = 10
+  STATSUB = 4
+  METHOD = 1
 BEGIN BULK
+EIGRL,1,0.00001,,5
 $ ***************************************************************************
 $   Written by : Femap with NX Nastran
 $   Version    : 11.3.1
@@ -38,6 +47,12 @@ FORCE          1       4       0      1.      0.      0.    500.
 FORCE          1       7       0      1.      0.      0.    500.
 FORCE          1       5       0      1.      0.      0.   1000.
 FORCE          1       6       0      1.      0.      0.   1000.
+$ Femap with NX Nastran Load Set 10 : Untitled
+$111111122222222333333334444444455555555
+FORCE         10       4       0      1.   -500.      0.      0.
+FORCE         10       7       0      1.   -500.      0.      0.
+FORCE         10       5       0      1.  -1000.      0.      0.
+FORCE         10       6       0      1.  -1000.      0.      0.
 $ Femap with NX Nastran Load Set 2 : Untitled
 FORCE          2       4       0      1.      0.      0.    500.
 $ Femap with NX Nastran Load Set 3 : Untitled
@@ -57,6 +72,21 @@ SPC1           2     123       7
 SPC1           2    1235      10
 SPC1           2    1235      11
 SPC1           2    1235      12
+$ Femap with NX Nastran Constraint Set 10 : Untitled
+$111111122222222333333334444444455555555
+SPC1          10      23       2
+SPC1          10      23       3
+SPC1          10      23       4
+SPC1          10      23       5
+SPC1          10      23       6
+SPC1          10      23       7
+SPC1          10      23       8
+SPC1          10      23       9
+
+SPC1          10     123       1
+SPC1          10     123      10
+SPC1          10     123      11
+SPC1          10     123      12
 $ Femap with NX Nastran Property 1 : PLATE Property
 PSHELL         1       1    .007       1      1.       1 .833333      0.
 $ Femap with NX Nastran Material 1 : ISOTROPIC Material

@@ -79,10 +79,8 @@ def lb(K, KG, tol=0, sparse_solver=True, silent=False,
         eigvecs = np.zeros((size, num_eigvalues), dtype=peigvecs.dtype)
         eigvecs[used_cols, :] = peigvecs[:, :num_eigvalues]
 
-    eigvals = -1./eigvals
-
-    eigvals = eigvals
-    eigvecs = eigvecs
+    check = eigvals!=0
+    eigvals[check] = -1./eigvals[check]
 
     msg('finished!', level=2, silent=silent)
 

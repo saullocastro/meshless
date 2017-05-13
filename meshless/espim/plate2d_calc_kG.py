@@ -2,11 +2,13 @@ from __future__ import absolute_import, division
 
 import numpy as np
 
+from ..logger import msg
 from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
-def calc_kG(d, edges, prop_from_node):
+def calc_kG(d, edges, prop_from_node, silent=True):
+    msg('Calculating KG...', silent=silent)
     n = d.shape[0] // 5
     dof = 5
 
@@ -39,10 +41,10 @@ def calc_kG(d, edges, prop_from_node):
             indices.append(0) # fourth dummy index
         indexpos = dict([[ind, i] for i, ind in enumerate(indices)])
         i1, i2, i3, i4 = indices
-        f1 = np.array([0, 0, 0, 0])
-        f2 = np.array([0, 0, 0, 0])
-        f3 = np.array([0, 0, 0, 0])
-        f4 = np.array([0, 0, 0, 0])
+        f1 = np.array([0, 0, 0, 0], dtype=float)
+        f2 = np.array([0, 0, 0, 0], dtype=float)
+        f3 = np.array([0, 0, 0, 0], dtype=float)
+        f4 = np.array([0, 0, 0, 0], dtype=float)
 
         nx1 = ipts[0].nx
         ny1 = ipts[0].ny
@@ -54,9 +56,6 @@ def calc_kG(d, edges, prop_from_node):
         nx2 = ipts[1].nx
         ny2 = ipts[1].ny
         le2 = ipts[1].le
-        f21 = ipts[1].f1
-        f22 = ipts[1].f2
-        f23 = ipts[1].f3
         f2[indexpos[ipts[1].n1.index]] = ipts[1].f1
         f2[indexpos[ipts[1].n2.index]] = ipts[1].f2
         f2[indexpos[ipts[1].n3.index]] = ipts[1].f3
@@ -112,15 +111,13 @@ def calc_kG(d, edges, prop_from_node):
         d4 = d[i4*dof: i4*dof+5]
         # d1... are [4, 4] [4, 5]
 
-        print(f1, f2, f3, f4, d1, d2, d3, d4)
-        d = np.dot(np.array([f1, f2, f3, f4]), np.array([d1, d2, d3, d4]))
-        # d is [4, 5]
+        dc = np.dot(np.array([f1, f2, f3, f4]), np.array([d1, d2, d3, d4]))
+        # dc is [4, 5]
 
-        u_c = d[:, 0]
-        v_c = d[:, 1]
-        phix_c = d[:, 3]
-        phiy_c = d[:, 4]
-        # u_c... are [4]
+        u_c = dc[:, 0]
+        v_c = dc[:, 1]
+        phix_c = dc[:, 3]
+        phiy_c = dc[:, 4]
 
         em = np.zeros(3)
         les = np.array([le1, le2, le3, le4])
@@ -157,5 +154,6 @@ def calc_kG(d, edges, prop_from_node):
         kG[i4*dof+2, i3*dof+2] += Ac*((Nxx*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nxy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f13*le1*nx1 + f23*le2*nx2 + f33*le3*nx3 + f43*le4*nx4)/Ac + (Nxy*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nyy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f13*le1*ny1 + f23*le2*ny2 + f33*le3*ny3 + f43*le4*ny4)/Ac)
         kG[i4*dof+2, i4*dof+2] += Ac*((Nxx*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nxy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + (Nxy*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nyy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)
 
+        msg('finished!', silent=silent)
     return kG
 

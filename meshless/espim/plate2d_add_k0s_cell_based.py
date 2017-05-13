@@ -2,13 +2,14 @@ from __future__ import absolute_import, division
 
 import numpy as np
 
+from ..logger import msg
 from ..constants import ZGLOBAL
 from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
-def add_k0s(k0, trias, prop_from_node):
-    print('Adding K0s to K0...')
+def add_k0s(k0, trias, prop_from_node, silent=True):
+    msg('Adding K0s to K0...', silent=silent)
     dof = 5
     for tria in trias:
         # n1 -> n2 -> n3 -> n1
@@ -158,5 +159,5 @@ def add_k0s(k0, trias, prop_from_node):
         k0[i3*dof+4, i3*dof+3] += (G44*(-b2*d2/4 + b3*d3/4) + G45*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 + a2*d2/(4*Ac2)) + Ac3*(0.166666666666667 - b3*c3/(4*Ac3))))*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 - b2*c2/(4*Ac2)) + Ac3*(0.166666666666667 + a3*d3/(4*Ac3)))/Ac + (G45*(-b2*d2/4 + b3*d3/4) + G55*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 + a2*d2/(4*Ac2)) + Ac3*(0.166666666666667 - b3*c3/(4*Ac3))))*(a2*c2/4 - a3*c3/4)/Ac
         k0[i3*dof+4, i3*dof+4] += (G44*(-b2*d2/4 + b3*d3/4) + G45*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 + a2*d2/(4*Ac2)) + Ac3*(0.166666666666667 - b3*c3/(4*Ac3))))*(-b2*d2/4 + b3*d3/4)/Ac + (G45*(-b2*d2/4 + b3*d3/4) + G55*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 + a2*d2/(4*Ac2)) + Ac3*(0.166666666666667 - b3*c3/(4*Ac3))))*(0.166666666666667*Ac1 + Ac2*(0.166666666666667 + a2*d2/(4*Ac2)) + Ac3*(0.166666666666667 - b3*c3/(4*Ac3)))/Ac
 
-    print('finished!')
+    msg('finished!', silent=silent)
     return k0

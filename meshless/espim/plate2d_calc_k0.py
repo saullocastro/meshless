@@ -2,14 +2,15 @@ from __future__ import absolute_import, division
 
 import numpy as np
 
+from ..logger import msg
 from ..constants import ZGLOBAL
 from .plate2d import IntegrationPoint, unitvec, area_of_polygon
 from .read_mesh import getMid
 
 
-def calc_k0(nodes, trias, edges, prop_from_node):
+def calc_k0(nodes, trias, edges, prop_from_node, silent=True):
     # checking inputs
-    print('Calculating K0...')
+    msg('Calculating K0...', silent=silent)
     for edge in edges:
         if prop_from_node:
             for node in edge.nodes:
@@ -104,8 +105,8 @@ def calc_k0(nodes, trias, edges, prop_from_node):
     index_ref_point = nodes_xyz.min(axis=0)
 
     index_dist = ((nodes_xyz - index_ref_point)**2).sum(axis=-1)
-    indices = np.argsort(index_dist)
-    for i, node in enumerate(nodes):
+    sort_ind = np.argsort(index_dist)
+    for i, node in enumerate(np.array(nodes)[sort_ind]):
         node.index = i
 
     n = len(nodes)
@@ -155,9 +156,6 @@ def calc_k0(nodes, trias, edges, prop_from_node):
         nx2 = ipts[1].nx
         ny2 = ipts[1].ny
         le2 = ipts[1].le
-        f21 = ipts[1].f1
-        f22 = ipts[1].f2
-        f23 = ipts[1].f3
         f2[indexpos[ipts[1].n1.index]] = ipts[1].f1
         f2[indexpos[ipts[1].n2.index]] = ipts[1].f2
         f2[indexpos[ipts[1].n3.index]] = ipts[1].f3
@@ -490,5 +488,5 @@ def calc_k0(nodes, trias, edges, prop_from_node):
         k0[i4*dof+4, i4*dof+3] += Ac*((D12*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac + D16*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac)*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + (D26*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac + D66*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac)*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)
         k0[i4*dof+4, i4*dof+4] += Ac*((D22*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac + D26*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac)*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac + (D26*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac + D66*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac)*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac)
 
-    print('finished!')
+    msg('finished!', silent=silent)
     return k0

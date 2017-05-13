@@ -2,29 +2,32 @@ from __future__ import absolute_import, division
 
 import numpy as np
 
+from ..logger import msg
 from ..constants import ZGLOBAL
 from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
-def add_k0s(k0, edges, prop_from_node):
-    print('Adding K0s to K0...')
+def add_k0s(k0, edges, prop_from_node, silent=True):
+    msg('Adding K0s to K0...', silent=silent)
     dof = 5
     for edge in edges:
+        # sub-tria1: mid1 -> n2 -> n1
+        # sub-tria2: mid2 -> n1 -> n2
+
         tria1 = edge.trias[0]
         mid1 = getMid(tria1)
         tmp = np.array([mid1, edge.n2.xyz, edge.n1.xyz])
         Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
+        Ac = edge.Ac
         if len(edge.trias) == 1:
             tria2 = None
             mid2 = None
-            Ac = Ac1
         elif len(edge.trias) == 2:
             tria2 = edge.trias[1]
             mid2 = getMid(tria2)
             tmp = np.array([mid2, edge.n1.xyz, edge.n2.xyz])
             Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
-            Ac = Ac1 + Ac2
         else:
             raise RuntimeError('Found %d trias for edge' % len(edge.trias))
         indices = set()
@@ -34,11 +37,8 @@ def add_k0s(k0, edges, prop_from_node):
             indices.add(ipt.n3.index)
         indices = sorted(list(indices))
         if len(edge.ipts) == 3:
-            indices.append(-1) # fourth dummy index
+            indices.append(0) # fourth dummy index
         i1, i2, i3, i4 = indices
-
-        # sub-tria1: mid1 -> n2 -> n1
-        # sub-tria2: mid2 -> n1 -> n2
 
         n1 = edge.n1
         n2 = edge.n2
@@ -243,5 +243,5 @@ def add_k0s(k0, edges, prop_from_node):
         k0[i4*dof+4, i4*dof+3] += 0.0277777777777778*(Ac2*Ac2)*G45/Ac
         k0[i4*dof+4, i4*dof+4] += 0.0277777777777778*(Ac2*Ac2)*G55/Ac
 
-    print('finished!')
+    msg('finished!', silent=silent)
     return k0

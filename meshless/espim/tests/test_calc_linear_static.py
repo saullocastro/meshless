@@ -46,11 +46,9 @@ def test_calc_linear_static():
 
             k0run = coo_matrix(k0run)
             u = solve(k0run, fext, silent=True)
-            xyz = np.array([n.xyz for n in nodes])
-            u = u[2::5][np.lexsort([xyz[:, 1], xyz[:, 0]])].reshape(4, 4).T
             ans = np.loadtxt(os.path.join(THISDIR, 'nastran_plate_16_nodes.result.txt'),
                     dtype=float)
-            assert np.allclose(u, ans, rtol=0.02)
+            assert np.allclose(u[2::5].reshape(4, 4).T, ans, rtol=0.02)
 
 
 if __name__ == '__main__':

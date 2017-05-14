@@ -8,11 +8,18 @@ from setuptools import setup, find_packages
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
-install_requires = ["numpy", "scipy", "coveralls", "pyNastran"]
+install_requires = [
+        "numpy",
+        "scipy",
+        "coveralls",
+        "pyNastran",
+        "setuptools-git-version",
+        ]
+
 if os.environ.get('TRAVIS') == 'true':
-    install_requires = ["numpy", "scipy", "coveralls"]
+    install_requires.pop("pyNastran")
 
 CLASSIFIERS = """\
 
@@ -31,7 +38,8 @@ Operating System :: Unix
 
 setup(
     name = "meshless",
-    version = VERSION,
+    version_format='{tag}.dev{commitcount}+{gitsha}',
+    #version = VERSION,
     author = "Saullo G. P. Castro",
     author_email = "castrosaullo@gmail.com",
     description = ("Meshless Methods for Computational Mechanics"),

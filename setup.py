@@ -8,8 +8,6 @@ from setuptools import setup, find_packages
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-VERSION = "0.2.0"
-
 install_requires = [
         "numpy",
         "scipy",
@@ -36,10 +34,15 @@ Operating System :: Unix
 
 """
 
-setup(
+is_release = False
+if is_release:
+    version_format = '{tag}.dev{commitcount}+{gitsha}'
+else:
+    version_format = '{tag}'
+
+s = setup(
     name = "meshless",
-    version_format='{tag}.dev{commitcount}+{gitsha}',
-    #version = VERSION,
+    version_format = version_format,
     author = "Saullo G. P. Castro",
     author_email = "castrosaullo@gmail.com",
     description = ("Meshless Methods for Computational Mechanics"),
@@ -53,5 +56,5 @@ setup(
 )
 
 with open("./meshless/version.py", "wb") as f:
-    f.write(b"__version__ = %s\n" % VERSION.encode())
+    f.write(b"__version__ = %s\n" % s.get_version().encode())
 

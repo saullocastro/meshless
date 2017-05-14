@@ -34,7 +34,7 @@ Operating System :: Unix
 
 """
 
-is_release = False
+is_release = True
 if is_release:
     version_format = '{tag}'
 else:

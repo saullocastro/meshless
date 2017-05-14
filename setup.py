@@ -10,6 +10,25 @@ def read(fname):
 
 VERSION = "0.1.0"
 
+install_requires = ["numpy", "scipy", "coveralls", "pyNastran"]
+if os.environ.get('TRAVIS') == 'true':
+    install_requires = ["numpy", "scipy", "coveralls"]
+
+CLASSIFIERS = """\
+
+Development Status :: 3 - Alpha
+Intended Audience :: Science/Research
+Intended Audience :: Developers
+Intended Audience :: Education
+Topic :: Scientific/Engineering :: Mathematics
+License :: OSI Approved :: BSD License
+Operating System :: Microsoft :: Windows
+Programming Language :: Python :: 2.7
+Programming Language :: Python :: 3.5
+Operating System :: Unix
+
+"""
+
 setup(
     name = "meshless",
     version = VERSION,
@@ -21,12 +40,8 @@ setup(
     url = "https://github.com/compmech/meshless",
     packages=find_packages(),
     long_description=read('README.md'),
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Topic :: Scientific/Engineering :: Mathematics",
-        "License :: OSI Approved :: BSD License",
-    ],
-    install_requires=["numpy", "scipy", "coveralls"],
+    classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
+    install_requires=install_requires,
 )
 
 with open("./meshless/version.py", "wb") as f:

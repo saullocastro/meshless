@@ -36,9 +36,9 @@ Operating System :: Unix
 
 is_release = False
 if is_release:
-    version_format = '{tag}.dev{commitcount}+{gitsha}'
-else:
     version_format = '{tag}'
+else:
+    version_format = '{tag}.dev{commitcount}+{gitsha}'
 
 s = setup(
     name = "meshless",

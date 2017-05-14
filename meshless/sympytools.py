@@ -5,8 +5,8 @@ import sympy
 from sympy import collect
 
 
-def pow2mult(instr):
-    """Power to multiplications
+def expandpow(instr):
+    """Expand power to multiplications
 
     Substitutes x**5 or pow(x, 5) by x*x*x*x*x
 
@@ -22,21 +22,24 @@ def pow2mult(instr):
 
     """
     old_new = []
-    for p in re.findall(r'\w+\*\*\d+', instr):
-        var, exp = p.split('**')
+    outstr = instr
+    search = r'\w+\*\*\s*\d+|\([^\(\)]+\)\*\*\d+'
+    for p in re.findall(search, instr):
+        var, exp = p.replace(' ', '').split('**')
         new = '(' + '*'.join([var]*int(exp)) + ')'
         old_new.append([p, new])
     # putting longer patterns first to avoid wrong
     # substitutions
     old_new = sorted(old_new, key=lambda x: len(x[0]))[::-1]
-    outstr = instr
     for old, new in old_new:
         outstr = outstr.replace(old, new)
 
     old_new = []
-    for p in re.findall(r'pow\(\w+,\s*\w+\)', instr):
-        var, exp = p.split('pow')[1].split('(')[1].split(')')[0].split(',')
-        new = '(' + '*'.join([var]*int(exp)) + ')'
+    for p in re.findall(r'pow\(\s*[^,]+\s*,\s*[^,\)]+\s*\)', instr):
+        var, exp = p.split('pow')[1].split(',')
+        var = var.strip()[1:] # removing left parentheses
+        exp = exp.strip()[:-1] # removing right parentheses
+        new = '(' + '*'.join(['(' + var.replace(' ', '') + ')']*int(exp)) + ')'
         old_new.append([p, new])
     for old, new in old_new:
         outstr = outstr.replace(old, new)
@@ -93,7 +96,7 @@ def print_as_sparse(m, mname, sufix=None, subs=None, header=None,
                     ls.append('    {expr}'.format(expr=k*expr))
             else:
                 if pow_by_mul:
-                    v = pow2mult(str(v))
+                    v = expandpow(str(v))
                 ls.append('{mname}v[c] += {v}'.format(mname=mname, v=v))
 
     string = '\n'.join(ls)
@@ -150,7 +153,7 @@ def print_as_full(m, mname, subs=None, header=None, print_file=True,
                     ls.append('    {expr}'.format(expr=k*expr))
             else:
                 if pow_by_mul:
-                    v = pow2mult(str(v))
+                    v = expandpow(str(v))
                 if dofpernode:
                     ls.append('{mname}[i{nindi}*dof+{i}, i{nindj}*dof+{j}] += {v}'.format(
                         mname=mname, i=i, j=j, v=v, nindi=nindi, nindj=nindj))
@@ -165,11 +168,9 @@ def print_as_full(m, mname, subs=None, header=None, print_file=True,
         items = [(k, v) for k, v in items if str(v) in string]
         if items:
             ls_header = []
-            ls_header.append('subs\n')
+            ls_header.append('# subs')
             for k, v in items:
-                ls_header.append('{0} = {1}'.format(v, k))
-            ls_header.append('\n')
-
+                ls_header.append('# {0} = {1}'.format(v, k))
             string = '\n'.join(ls_header + ls)
 
     if print_file:

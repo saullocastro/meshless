@@ -17,7 +17,7 @@ install_requires = [
         ]
 
 if os.environ.get('TRAVIS') == 'true':
-    install_requires.pop("pyNastran")
+    install_requires.pop(install_requires.index("pyNastran"))
 
 CLASSIFIERS = """\
 
@@ -34,7 +34,7 @@ Operating System :: Unix
 
 """
 
-is_release = False
+is_release = True
 if is_release:
     version_format = '{tag}'
 else:

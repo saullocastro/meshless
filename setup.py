@@ -42,6 +42,11 @@ if is_release:
 else:
     version_format = '{tag}.dev{commitcount}+{gitsha}'
 
+data_files = [('', [
+        'README.md',
+        'LICENSE',
+        ])]
+
 s = setup(
     name = "meshless",
     version_format = version_format,
@@ -52,6 +57,7 @@ s = setup(
     keywords = "es-pim finite element partial diferential equations",
     url = "https://github.com/compmech/meshless",
     packages=find_packages(),
+    data_files=data_files,
     long_description=read('README.md'),
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     install_requires=install_requires,

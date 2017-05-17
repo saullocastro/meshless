@@ -1,6 +1,49 @@
+from __future__ import absolute_import
+
 import os
 import inspect
+import subprocess
 from setuptools import setup, find_packages
+
+
+def git_version():
+    def _minimal_ext_cmd(cmd):
+        # construct minimal environment
+        env = {}
+        for k in ['SYSTEMROOT', 'PATH']:
+            v = os.environ.get(k)
+            if v is not None:
+                env[k] = v
+        # LANGUAGE is used on win32
+        env['LANGUAGE'] = 'C'
+        env['LANG'] = 'C'
+        env['LC_ALL'] = 'C'
+        out = subprocess.Popen(cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
+        return out
+
+    try:
+        out = _minimal_ext_cmd(['git', 'rev-parse', 'HEAD'])
+        git_revision = out.strip().decode('ascii')
+    except OSError:
+        git_revision = "Unknown"
+
+    return git_revision
+
+
+def get_version_info(version, is_released):
+    fullversion = version
+    if not is_released:
+        git_revision = git_version()
+        fullversion += '.dev0+' + git_revision[:7]
+    return fullversion
+
+
+def write_version_py(version, is_released, filename='compmech/version.py'):
+    fullversion = get_version_info(version, is_released)
+    with open("./meshless/version.py", "wb") as f:
+        f.write(b'__version__ = "%s"\n' % fullversion.encode())
+    return fullversion
+
 
 # Utility function to read the README file.
 # Used for the long_description.  It's nice, because now 1) we have a top level
@@ -9,6 +52,9 @@ from setuptools import setup, find_packages
 def read(fname):
     setupdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
     return open(os.path.join(setupdir, fname)).read()
+
+
+#_____________________________________________________________________________
 
 install_requires = [
         "numpy",
@@ -36,20 +82,20 @@ Operating System :: Unix
 
 """
 
-is_release = False
-if is_release:
-    version_format = '{tag}'
-else:
-    version_format = '{tag}.dev{commitcount}+{gitsha}'
+is_released = True
+version = '0.1.5'
+
+fullversion = write_version_py(version, is_released)
 
 data_files = [('', [
         'README.md',
         'LICENSE',
+        'meshless/version.py',
         ])]
 
 s = setup(
     name = "meshless",
-    version_format = version_format,
+    version = fullversion,
     author = "Saullo G. P. Castro",
     author_email = "castrosaullo@gmail.com",
     description = ("Meshless Methods for Computational Mechanics"),
@@ -62,7 +108,4 @@ s = setup(
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     install_requires=install_requires,
 )
-
-with open("./meshless/version.py", "wb") as f:
-    f.write(b"__version__ = %s\n" % s.get_version().encode())
 

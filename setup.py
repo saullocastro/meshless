@@ -83,7 +83,7 @@ Operating System :: Unix
 """
 
 is_released = True
-version = '0.1.10'
+version = '0.1.15'
 
 fullversion = write_version_py(version, is_released)
 

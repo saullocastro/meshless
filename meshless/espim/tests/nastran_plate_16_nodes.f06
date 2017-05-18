@@ -1,0 +1,382 @@
+1
+ 
+ 
+ 
+ 
+                      Warning: This computer program is protected by copyright law and international treaties.       
+                  Unauthorized use, reproduction or distribution of this computer program, or any portion of it, may 
+                                          result in severe civil and criminal penalties.                             
+                         Copyright (C) 2013 MSC Software Corporation and its licensors. All rights reserved.         
+ 
+ 
+                                              * * * * * * * * * * * * * * * * * * * *
+                                              * * * * * * * * * * * * * * * * * * * *
+                                              * *                                 * *
+                                              * *           MSC Software          * *
+                                              * *               CORP              * *
+                                              * *                                 * *
+                                              * *      M S C   N a s t r a n      * *
+                                              * *                                 * *
+                                              * *                                 * *
+                                              * *                                 * *
+                                              * *     Version 2013.1.0-CL237422   * *
+                                              * *                                 * *
+                                              * *                                 * *
+                                              * *                                 * *
+                                              * *          NOV 27, 2013           * *
+                                              * *                                 * *
+                                              * *              Intel              * *
+                                              * *        MODEL 386/486/586        * *
+                                              * *    Windows 10 Home 6.2 9200     * *
+                                              * *        Compiled for 8664        * *
+                                              * *                                 * *
+                                              * * * * * * * * * * * * * * * * * * * *
+                                              * * * * * * * * * * * * * * * * * * * *
+1 News file -  (November 22,2013):
+  
+               Welcome to MSC Nastran 2013.1
+  
+  
+   Details of the new capabilities can be found in the MSC Nastran 2013.1
+     Release Guide available online in the installation documentation
+     sub-directory.
+   Additional information can be found at the MSC Nastran Product Support page:
+  
+      http://simcompanion.mscsoftware.com
+  
+  
+   The support page provides links to these valuable information:
+      * A searchable Knowledge Base containing examples and answers to thousands
+        of frequently asked questions written by MSC Software subject-matter
+        experts.
+      * Peer-to-peer Discussion Forums enabling you to post questions for your
+        MSC Software products and receive answers from other users worldwide.
+      * A list of known issues with the product and any workarounds.
+      * Instructions on how to contact technical support
+      * A mechanism for sending us product feedback or enhancement requests.
+      * Hardware and software requirements.
+      * Examples and Tutorials
+      * and much more.
+  
+   For information on training, please visit our Training web site
+  
+      http://www.mscsoftware.com/Contents/Services/Training/
+  
+   MSC Nastran brings powerful new features and enhancements for engineering
+   solutions.
+  
+   The highlights for the MSC Nastran 2013.1 release include:
+  
+  •   HPC
+     –   ACMS Performance Improvements which reduces wall time.
+  
+  •   Dynamics
+     –   New Axisymmetric Rotor Dynamics model
+     -   Rotors may be included in external Superelements
+  
+  •   Durability: Nastran Embedded Fatigue (NEF)
+     – Superelement support
+     – Restart support
+       – Out-of-core processing
+       – Histogram and time history output (HISTOGRAM case control)
+       – Static failure criteria (DAMAGE line on FTGPARM entry)
+       –	Duty cycle event name specification (FTGEVNT entry)
+       – Enhanced F06 output
+1 
+  
+  •   Advanced Nonlinear Implicit (SOL 400)
+     -	Stress recovery with advanced elements for perturbation load cases.
+     -   Improve Contact User Interface Improvements to make input file more
+ 	readable and reduce the amount of input for models with many contact
+ 	bodies.
+     -	Sequential thermal-mechanical analysis for 3-D thermal shell elements
+     -	Support of Digimat multi-scale composites material modeling
+  	
+  
+  •   Explicit Dynamics (SOL 700)
+     –	Support for User Subroutines
+     -	Support of Digimat multi-scale composites material modeling
+  
+  •  Ease of Use
+     -	User Defined Services (UDS) Enhancements to simplify usage.
+     -	Extension to Monitor Points to allow results in local coordinate system
+  
+  
+  
+  
+1                                                                               MAY  12, 2017  MSC Nastran 11/27/13   PAGE     1
+                                                                                                                                    
+0        N A S T R A N    F I L E    A N D    S Y S T E M    P A R A M E T E R    E C H O                                           
+0                                                                                                                                   
+                                                                                                                                    
+                                                                                                                                    
+     NASTRAN PARALLEL=4 $(C:/MSC.SOFTWARE/MSC_NASTRAN/20131/CONF/NAST20131.RCF[3])   
+     NASTRAN BUFFSIZE=8193 $(C:/MSC.SOFTWARE/MSC_NASTRAN/20131/CONF/NAST20131.RCF[4])
+     INIT MASTER(S)                                                                  
+     NASTRAN SYSTEM(442)=-1,SYSTEM(319)=1                                            
+1                                                                               MAY  12, 2017  MSC Nastran 11/27/13   PAGE     2
+                                                                                                                                    
+0        N A S T R A N    E X E C U T I V E    C O N T R O L    E C H O                                                             
+0                                                                                                                                   
+                                                                                                                                    
+                                                                                                                                    
+     ID TEMP,FEMAP                                                                           
+     SOL 105                                                                                 
+     CEND                                                                                    
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     3
+                                                                                                                                    
+0                                                                                                                                   
+0                                        C A S E    C O N T R O L    E C H O                                                        
+                 COMMAND                                                                                                            
+                 COUNT                                                                                                              
+                  1        TITLE = NX NASTRAN STATIC ANALYSIS SET                                                
+                  2        ECHO = NONE                                                                           
+                  3        DISPLACEMENT(PLOT) = ALL                                                              
+                  4      SUBCASE 1                                                                               
+                  5        SPC = 1                                                                               
+                  6        LOAD = 1                                                                              
+                  7      SUBCASE 2                                                                               
+                  8        SPC = 1                                                                               
+                  9        LOAD = 2                                                                              
+                 10      SUBCASE 3                                                                               
+                 11        SPC = 2                                                                               
+                 12        LOAD = 3                                                                              
+                 13      SUBCASE 4                                                                               
+                 14        SPC = 10                                                                              
+                 15        LOAD = 10                                                                             
+                 16      SUBCASE 5                                                                               
+                 17        SPC = 10                                                                              
+                 18        LOAD = 10                                                                             
+                 19        STATSUB = 4                                                                           
+                 20        METHOD = 1                                                                            
+                 21      BEGIN BULK                                                                              
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     4
+                                                                                                                                    
+0                                                                                                                                   
+                                        M O D E L   S U M M A R Y          BULK = 0
+                                   ENTRY NAME        NUMBER OF ENTRIES
+                                   ----------        -----------------
+                                       CORD2C                        1
+                                       CORD2S                        1
+                                       CTRIA3                       18
+                                        EIGRL                        1
+                                        FORCE                       11
+                                         GRID                       16
+                                         MAT1                        1
+                                        PARAM                        5
+                                       PSHELL                        1
+                                         SPC1                        5
+
+ ^^^     
+ ^^^ >>> IFP OPERATIONS COMPLETE <<< 
+ ^^^     
+ *** USER INFORMATION MESSAGE 4109 (OUTPX2)
+     THE LABEL IS XXXXXXXX FOR FORTRAN UNIT 12
+     (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =          7 WORDS.)
+           (NUMBER OF FORTRAN RECORDS WRITTEN =          8 RECORDS.)
+                (TOTAL DATA WRITTEN FOR LABEL =         17 WORDS.)
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     5
+                                                                                                                                    
+0                                                                                                                                   
+0 RESULTANTS ABOUT ORIGIN OF SUPERELEMENT BASIC COORDINATE SYSTEM IN SUPERELEMENT BASIC SYSTEM COORDINATES.
+
+0                                                  OLOAD    RESULTANT       
+  SUBCASE/    LOAD
+  DAREA ID    TYPE       T1            T2            T3            R1            R2            R3
+0        1     FX    0.000000E+00     ----          ----          ----       0.000000E+00  0.000000E+00                             
+               FY       ----       0.000000E+00     ----       0.000000E+00     ----       0.000000E+00                             
+               FZ       ----          ----       3.000000E+03  1.200000E+04 -2.100000E+04     ----                                  
+               MX       ----          ----          ----       0.000000E+00     ----          ----                                  
+               MY       ----          ----          ----          ----       0.000000E+00     ----                                  
+               MZ       ----          ----          ----          ----          ----       0.000000E+00                             
+             TOTALS  0.000000E+00  0.000000E+00  3.000000E+03  1.200000E+04 -2.100000E+04  0.000000E+00
+0        2     FX    0.000000E+00     ----          ----          ----       0.000000E+00  0.000000E+00                             
+               FY       ----       0.000000E+00     ----       0.000000E+00     ----       0.000000E+00                             
+               FZ       ----          ----       5.000000E+02  1.500000E+03 -3.500000E+03     ----                                  
+               MX       ----          ----          ----       0.000000E+00     ----          ----                                  
+               MY       ----          ----          ----          ----       0.000000E+00     ----                                  
+               MZ       ----          ----          ----          ----          ----       0.000000E+00                             
+             TOTALS  0.000000E+00  0.000000E+00  5.000000E+02  1.500000E+03 -3.500000E+03  0.000000E+00
+0        3     FX    0.000000E+00     ----          ----          ----       0.000000E+00  0.000000E+00                             
+               FY       ----       0.000000E+00     ----       0.000000E+00     ----       0.000000E+00                             
+               FZ       ----          ----       0.000000E+00 -2.000000E+03  0.000000E+00     ----                                  
+               MX       ----          ----          ----       0.000000E+00     ----          ----                                  
+               MY       ----          ----          ----          ----       0.000000E+00     ----                                  
+               MZ       ----          ----          ----          ----          ----       0.000000E+00                             
+             TOTALS  0.000000E+00  0.000000E+00  0.000000E+00 -2.000000E+03  0.000000E+00  0.000000E+00
+0        4     FX   -3.000000E+03     ----          ----          ----       0.000000E+00  1.200000E+04                             
+               FY       ----       0.000000E+00     ----       0.000000E+00     ----       0.000000E+00                             
+               FZ       ----          ----       0.000000E+00  0.000000E+00  0.000000E+00     ----                                  
+               MX       ----          ----          ----       0.000000E+00     ----          ----                                  
+               MY       ----          ----          ----          ----       0.000000E+00     ----                                  
+               MZ       ----          ----          ----          ----          ----       0.000000E+00                             
+             TOTALS -3.000000E+03  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.200000E+04
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     6
+                                                                                                                                    
+0                                                                                                                                   
+0 RESULTANTS ABOUT ORIGIN OF SUPERELEMENT BASIC COORDINATE SYSTEM IN SUPERELEMENT BASIC SYSTEM COORDINATES.
+
+0                                                  OLOAD    RESULTANT       
+  SUBCASE/    LOAD
+  DAREA ID    TYPE       T1            T2            T3            R1            R2            R3
+0        5     FX   -3.000000E+03     ----          ----          ----       0.000000E+00  1.200000E+04                             
+               FY       ----       0.000000E+00     ----       0.000000E+00     ----       0.000000E+00                             
+               FZ       ----          ----       0.000000E+00  0.000000E+00  0.000000E+00     ----                                  
+               MX       ----          ----          ----       0.000000E+00     ----          ----                                  
+               MY       ----          ----          ----          ----       0.000000E+00     ----                                  
+               MZ       ----          ----          ----          ----          ----       0.000000E+00                             
+             TOTALS -3.000000E+03  0.000000E+00  0.000000E+00  0.000000E+00  0.000000E+00  1.200000E+04
+  
+ *** SYSTEM INFORMATION MESSAGE 4159 (DFMSA)
+     THE DECOMPOSITION OF KLL      YIELDS A MAXIMUM MATRIX-TO-FACTOR-DIAGONAL RATIO OF    2.312688E+03
+  
+ *** SYSTEM INFORMATION MESSAGE 4159 (DFMSA)
+     THE DECOMPOSITION OF KLL      YIELDS A MAXIMUM MATRIX-TO-FACTOR-DIAGONAL RATIO OF    9.605554E+01
+  
+ *** SYSTEM INFORMATION MESSAGE 4159 (DFMSA)
+     THE DECOMPOSITION OF KLL      YIELDS A MAXIMUM MATRIX-TO-FACTOR-DIAGONAL RATIO OF    7.624454E+00
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     7
+                                                                                                                                    
+0                                                                                                            SUBCASE 1              
+ *** USER INFORMATION MESSAGE 5293 (SSG3A)
+    FOR DATA BLOCK KLL     
+    LOAD SEQ. NO.             EPSILON              EXTERNAL WORK      EPSILONS LARGER THAN 0.001 ARE FLAGGED WITH ASTERISKS
+    User information:
+    One line of output is printed for each static loading condition.
+    Small values of EPSILON are due to accumulated round-off error. Large
+    values of EPSILON indicate possible singularities in the stiffness
+    matrix.  See Section 9.5.1.
+                1          1.1661114E-12          1.2071041E+05
+                2          1.5118877E-12          3.5075366E+03
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     8
+                                                                                                                                    
+0                                                                                                            SUBCASE 3              
+ *** USER INFORMATION MESSAGE 5293 (SSG3A)
+    FOR DATA BLOCK KLL     
+    LOAD SEQ. NO.             EPSILON              EXTERNAL WORK      EPSILONS LARGER THAN 0.001 ARE FLAGGED WITH ASTERISKS
+    User information:
+    One line of output is printed for each static loading condition.
+    Small values of EPSILON are due to accumulated round-off error. Large
+    values of EPSILON indicate possible singularities in the stiffness
+    matrix.  See Section 9.5.1.
+                3          2.3527179E-14          5.6596606E+02
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE     9
+                                                                                                                                    
+0                                                                                                            SUBCASE 4              
+ *** USER INFORMATION MESSAGE 5293 (SSG3A)
+    FOR DATA BLOCK KLL     
+    LOAD SEQ. NO.             EPSILON              EXTERNAL WORK      EPSILONS LARGER THAN 0.001 ARE FLAGGED WITH ASTERISKS
+    User information:
+    One line of output is printed for each static loading condition.
+    Small values of EPSILON are due to accumulated round-off error. Large
+    values of EPSILON indicate possible singularities in the stiffness
+    matrix.  See Section 9.5.1.
+                4          7.2627262E-16          2.8239084E-02
+ *** USER INFORMATION MESSAGE 4114 (OUTPX2)
+     DATA BLOCK OUG1     WRITTEN ON FORTRAN UNIT  12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR OUG, TRL =
+                    101                 0               512                 0                 0                 0                 2
+     NAME OF DATA BLOCK WRITTEN ON FORTRAN UNIT IS OUG1    
+        (MAXIMUM POSSIBLE FORTRAN RECORD SIZE =       16386 WORDS.)
+     (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =         146 WORDS.)
+           (NUMBER OF FORTRAN RECORDS WRITTEN =          50 RECORDS.)
+           (TOTAL DATA WRITTEN FOR DATA BLOCK =        1153 WORDS.)
+ *** USER INFORMATION MESSAGE 5010 (LNCILD)
+     STURM SEQUENCE DATA FOR EIGENVALUE EXTRACTION.
+     TRIAL EIGENVALUE = 1.021344D+01, CYCLES = 5.086349D-01 THE STURM COUNT = 0
+     User information:
+     This message is automatic output during eigenvalue extraction.  This
+     can be used, along with the list of eigenvalues, to identify the modes
+     found. See the MSC.NASTRAN Numerical Methods User's Guide.
+ *** USER INFORMATION MESSAGE 5010 (LNCILD)
+     STURM SEQUENCE DATA FOR EIGENVALUE EXTRACTION.
+     TRIAL EIGENVALUE = 3.794795D+05, CYCLES = 9.804248D+01 THE STURM COUNT = 5
+     User information:
+     This message is automatic output during eigenvalue extraction.  This
+     can be used, along with the list of eigenvalues, to identify the modes
+     found. See the MSC.NASTRAN Numerical Methods User's Guide.
+
+ TABLE OF SHIFTS:  (LNNRIGL)
+ SHIFT #        SHIFT VALUE         FREQUENCY, CYCLES     # EIGENVALUES BELOW    # NEW EIGENVALUES FOUND
+     1.        1.0213442E+01          5.0863492E-01                 0                       20
+     2.        3.7947950E+05          9.8042480E+01                 5                        0
+
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE    10
+                                                                                                                                    
+0                                                                                                            SUBCASE 5              
+0
+
+
+                          E I G E N V A L U E  A N A L Y S I S   S U M M A R Y   (READ MODULE) 
+
+
+
+                                     BLOCK SIZE USED ......................     7
+
+                                     NUMBER OF DECOMPOSITIONS .............     2
+
+                                     NUMBER OF ROOTS FOUND ................     5
+
+                                     NUMBER OF SOLVES REQUIRED ............     6
+
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE    11
+                                                                                                                                    
+0                                                                                                            SUBCASE 5              
+ 
+                                              R E A L   E I G E N V A L U E S
+   MODE    EXTRACTION      EIGENVALUE            RADIANS             CYCLES            GENERALIZED         GENERALIZED
+    NO.       ORDER                                                                       MASS              STIFFNESS
+        1         1        1.134827E+01        3.368719E+00        5.361483E-01        2.995473E+03        3.399343E+04
+        2         2        1.185499E+01        3.443108E+00        5.479876E-01        2.408705E+03        2.855518E+04
+        3         3        6.741985E+01        8.210959E+00        1.306815E+00        2.024588E+03        1.364974E+05
+        4         4        6.823286E+01        8.260318E+00        1.314670E+00        1.809563E+03        1.234717E+05
+        5         5        3.718478E+05        6.097933E+02        9.705161E+01        7.967233E+03        2.962598E+09
+ *** USER INFORMATION MESSAGE 4114 (OUTPX2)
+     DATA BLOCK OUG1     WRITTEN ON FORTRAN UNIT  12 IN BINARY (LTLEND) FORMAT USING NDDL DESCRIPTION FOR OUG, TRL =
+                    101                 0               640                 0                 0                 0                 2
+     NAME OF DATA BLOCK WRITTEN ON FORTRAN UNIT IS OUG1    
+        (MAXIMUM POSSIBLE FORTRAN RECORD SIZE =       16386 WORDS.)
+     (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =         146 WORDS.)
+           (NUMBER OF FORTRAN RECORDS WRITTEN =          60 RECORDS.)
+           (TOTAL DATA WRITTEN FOR DATA BLOCK =        1435 WORDS.)
+ *** USER INFORMATION MESSAGE 4110 (OUTPX2)
+                                 END-OF-DATA SIMULATION ON FORTRAN UNIT 12
+                                 (MAXIMUM SIZE OF FORTRAN RECORDS WRITTEN =      1 WORDS.)
+                                       (NUMBER OF FORTRAN RECORDS WRITTEN =      1 RECORDS.)
+                                       (TOTAL DATA WRITTEN FOR EOF MARKER =      1 WORDS.)
+1    NX NASTRAN STATIC ANALYSIS SET                                             MAY  12, 2017  MSC Nastran 11/27/13   PAGE    12
+                                                                                                                                    
+0                                                                                                            SUBCASE 5              
+ * * * *  D B D I C T   P R I N T  * * * *      SUBDMAP = PRTSUM  ,  DMAP STATEMENT NO.     41
+
+
+
+0                                   * * * *  A N A L Y S I S  S U M M A R Y  T A B L E  * * * *
+0 SEID  PEID PROJ VERS APRCH      SEMG SEMR SEKR SELG SELR MODES DYNRED SOLLIN PVALID SOLNL LOOPID DESIGN CYCLE SENSITIVITY
+ --------------------------------------------------------------------------------------------------------------------------
+     0     0    1    1 '        '    T    T    T    T    T     T      F      T      0     F     -1            0           F
+0SEID = SUPERELEMENT ID.
+ PEID = PRIMARY SUPERELEMENT ID OF IMAGE SUPERELEMENT.
+ PROJ = PROJECT ID NUMBER.
+ VERS = VERSION ID.
+ APRCH = BLANK FOR STRUCTURAL ANALYSIS.  HEAT FOR HEAT TRANSFER ANALYSIS.
+ SEMG = STIFFNESS AND MASS MATRIX GENERATION STEP.
+ SEMR = MASS MATRIX REDUCTION STEP (INCLUDES EIGENVALUE SOLUTION FOR MODES).
+ SEKR = STIFFNESS MATRIX REDUCTION STEP.
+ SELG = LOAD MATRIX GENERATION STEP.
+ SELR = LOAD MATRIX REDUCTION STEP. 
+ MODES = T (TRUE) IF NORMAL MODES OR BUCKLING MODES CALCULATED.
+ DYNRED = T (TRUE) MEANS GENERALIZED DYNAMIC AND/OR COMPONENT MODE REDUCTION PERFORMED.
+ SOLLIN = T (TRUE) IF LINEAR SOLUTION EXISTS IN DATABASE.
+ PVALID = P-DISTRIBUTION ID OF P-VALUE FOR P-ELEMENTS
+ LOOPID = THE LAST LOOPID VALUE USED IN THE NONLINEAR ANALYSIS.  USEFUL FOR RESTARTS.
+ SOLNL = T (TRUE) IF NONLINEAR SOLUTION EXISTS IN DATABASE.
+ DESIGN CYCLE = THE LAST DESIGN CYCLE (ONLY VALID IN OPTIMIZATION).
+ SENSITIVITY = SENSITIVITY MATRIX GENERATION FLAG.
+ 
+ No PARAM values were set in the Control File.
+ 
+1                                        * * * END OF JOB * * *
+ 
+ 
+ No Symbolic Replacement variables or values were specified.
+

@@ -24,39 +24,39 @@ def test_calc_linear_buckling():
             'cell-based-no-smoothing': 5.3855713}
     for prop_from_nodes in [True, False]:
         for k0s_method in ['edge-based', 'cell-based', 'cell-based-no-smoothing']:
-            nodes, trias, edges = read_mesh(os.path.join(THISDIR, 'nastran_plate_16_nodes.dat'))
-            for tria in trias:
+            mesh = read_mesh(os.path.join(THISDIR, 'nastran_plate_16_nodes.dat'))
+            for tria in mesh.elements.values():
                 tria.prop = lam
-            for node in nodes:
+            for node in mesh.nodes.values():
                 node.prop = lam
-            k0 = calc_k0(nodes, trias, edges, prop_from_nodes)
-            add_k0s(k0, edges, trias, prop_from_nodes, k0s_method)
+            k0 = calc_k0(mesh, prop_from_nodes)
+            add_k0s(k0, mesh, prop_from_nodes, k0s_method)
 
             # running static subcase first
             dof = 5
             n = k0.shape[0] // 5
             fext = np.zeros(n*dof, dtype=np.float64)
-            fext[nodes[3].index*dof + 0] = -500.
-            fext[nodes[4].index*dof + 0] = -1000.
-            fext[nodes[5].index*dof + 0] = -1000.
-            fext[nodes[6].index*dof + 0] = -500.
+            fext[mesh.nodes[4].index*dof + 0] = -500.
+            fext[mesh.nodes[5].index*dof + 0] = -1000.
+            fext[mesh.nodes[6].index*dof + 0] = -1000.
+            fext[mesh.nodes[7].index*dof + 0] = -500.
 
             # boundary conditions
             def bc(K):
-                for i in [0, 9, 10, 11]:
+                for i in [1, 10, 11, 12]:
                     for j in [0, 1, 2]:
-                        K[nodes[i].index*dof+j, :] = 0
-                        K[:, nodes[i].index*dof+j] = 0
+                        K[mesh.nodes[i].index*dof+j, :] = 0
+                        K[:, mesh.nodes[i].index*dof+j] = 0
 
-                for i in [1, 2, 3, 4, 5, 6, 7, 8]:
+                for i in [2, 3, 4, 5, 6, 7, 8, 9]:
                     for j in [1, 2]:
-                        K[nodes[i].index*dof+j, :] = 0
-                        K[:, nodes[i].index*dof+j] = 0
+                        K[mesh.nodes[i].index*dof+j, :] = 0
+                        K[:, mesh.nodes[i].index*dof+j] = 0
 
             bc(k0)
             k0 = coo_matrix(k0)
             d = solve(k0, fext, silent=True)
-            kG = calc_kG(d, edges, prop_from_nodes)
+            kG = calc_kG(d, mesh, prop_from_nodes)
             bc(kG)
             kG = coo_matrix(kG)
 
@@ -66,6 +66,7 @@ def test_calc_linear_buckling():
             if do_plot:
                 do_plot = False
                 import matplotlib.pyplot as plt
+                nodes = mesh.nodes.values()
                 ind0 = np.array([[n.index, i] for (i, n) in enumerate(nodes)])
                 ind0 = ind0[np.argsort(ind0[:, 0])]
                 nodes = np.array(nodes)[ind0[:, 1]]

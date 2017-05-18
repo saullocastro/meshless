@@ -1,0 +1,151 @@
+MSC Nastran V2013.1 (Intel Windows 10 Home 6.2 9200) Control File: 
+----------------------------------------------------------------- 
+Nastran PARALLEL=4 $(c:/msc.software/msc_nastran/20131/conf/nast20131.rcf[3])
+Nastran BUFFSIZE=8193 $(c:/msc.software/msc_nastran/20131/conf/nast20131.rcf[4])
+JID='c:/repositories/meshless/meshless/espim/tests/nastran_plate_16_nodes.dat'
+OUT='./nastran_plate_16_nodes'
+MEM=2129526784      $ WORDS
+MACH='Intel'
+OPER='Windows 10 Home'
+OSV='6.2 9200'
+MODEL='P5-4/5408 (LAPTOP-6SBP5HBJ)'
+NPROC='8'
+CONFIG=15
+NPROC=8
+symbol=DELDIR='c:/msc.software/msc_nastran/20131/msc20131/nast/del' $(program default)
+symbol=DEMODIR='c:/msc.software/msc_nastran/20131/msc20131/nast/demo' $(program default)
+symbol=LM_NO_SNMP=1 $(c:/msc.software/msc_nastran/20131/conf/nast20131.rcf[7])
+symbol=NASD_PATH=C:\MSC.Software\MSC_Nastran\20131\msc20131\dyna\win64 $(c:/msc.software/msc_nastran/20131/conf/nast20131.rcf[9])
+symbol=NASM_PATH=C:\MSC.Software\MSC_Nastran\20131\msc20131\marc\tools $(c:/msc.software/msc_nastran/20131/conf/nast20131.rcf[8])
+symbol=SSSALTERDIR='c:/msc.software/msc_nastran/20131/msc20131/nast/sssalter' $(program default)
+symbol=TPLDIR='c:/msc.software/msc_nastran/20131/msc20131/nast/tpl' $(program default)
+SDIR='c:/scratch/nastran_plate_16_nodes.T8652_14'
+DBS='./nastran_plate_16_nodes'
+SCR='no'
+SMEM=100
+BPOOL=532381696w
+NEWDEL='c:/msc.software/msc_nastran/20131/msc20131/win64/SSS'
+DEL='MSCDEF'
+DML=MSCDEF
+SDL=MSCDEF
+AUTH='C:\MSC.Software\MSC_Nastran\license.dat'
+AUTHQUE=20
+MSGCAT='c:/msc.software/msc_nastran/20131/msc20131/win64/analysis.msg'
+MSGDEST='f06'
+NEWS='c:/msc.software/msc_nastran/20131/msc20131/nast/news.txt'
+----------------------------------------------------------------- 
+MSC_ISHELLPATH=C:\MSC.Software\MSC_Nastran\20131\msc20131\actran\win64\Actran_14.1.b.69252\bin; 
+MSC_JIDPATH= 
+PATH=c:\msc.software\msc_nastran\20131\msc20131\win64\nCode\bin;c:\msc.software\msc_nastran\20131\msc20131\win64\nvidia;c:\msc.software\msc_nastran\20131\msc20131\win64\lib;c:\msc.software\msc_nastran\20131\msc20131\win64;C:\Program Files (x86)\IntelSWTools\Trace Analyzer and Collector\9.1.2.024\bin;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2016.3.207\windows\mpi\intel64\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32_win\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64_win\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32_win\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\mpirt;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\ia32\compiler;C:\ProgramData\Oracle\Java\javapath;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Vim\vim80;C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\;C:\Program Files\Git\cmd;C:\dev\CGAL-4.9\auxiliary\gmp\lib;C:\dev\boost_1_63_0\lib64-msvc-14.0;C:\dev\CMake\bin;C:\dev\CGAL-4.9\build\bin;C:\Program Files\VTK\bin;C:\Program Files (x86)\IntelSWTools\Trace Analyzer and Collector\9.1.2.024\dll;C:\IntelPython35\Scripts;C:\IntelPython35;C:\Users\saullo\AppData\Local\Microsoft\WindowsApps;C:\Users\saullo\AppData\Roaming\Dashlane\4.6.7.25343\bin\Firefox_Extension\{442718d9-475e-452a-b3e1-fb1ee16b8e9f}\components 
+SCA_SERVICE_CATALOG=c:\msc.software\msc_nastran\20131\msc20131\res\SCAServiceCatalog.xml 
+SCA_RESOURCE_DIR=c:\msc.software\msc_nastran\20131\msc20131\res 
+Cmd Line:    C:\MSC.Software\MSC_Nastran\20131\msc20131\win64\nastran.exe JID=C:\repositories\meshless\meshless\espim\tests\nastran_plate_16_nodes.dat 
+Current Dir: C:\repositories\meshless\meshless\espim\tests 
+Time Cmd:    c:\msc.software\msc_nastran\20131\msc20131\win64\msctime 
+Executable:  c:\msc.software\msc_nastran\20131\msc20131\win64\analysis.exe 
+Arch= Kywd:  [Not specified]  
+MSC_MSG:     stderr  
+FPE:         yes  
+----------------------------------------------------------------- 
+Current resource limits:
+ Physical memory:                    16247 MB
+ Physical memory available:           9165 MB
+ Paging file size:                   18679 MB
+ Paging file size available:         10556 MB
+ Virtual memory:                 134217727 MB
+ Virtual memory available:       134217666 MB
+----------------------------------------------------------------- 
+System configuration:
+ Hostname:         LAPTOP-6SBP5HBJ
+ Architecture:     win64
+ Platform:         Intel Windows 10 Home 6.2 9200 (Windows Compute Cluster)
+ Model:            P5-4/5417
+ Clock freq.:      5408 MHz
+ Number of CPUs:   8
+ Executable:       standard
+ Raw model ID:     15
+ Config number:    15
+ Physical memory:  16247 MB
+ Virtual memory:   18679 MB
+ Numeric format:   32-bit little-endian IEEE.
+ Bytes per word:   4
+ Disk block size:  512 bytes (128 words)
+ Remote shell cmd: "c:/msc.software/msc_nastran/20131/msc20131/win64/mscrmtcmd.exe" (Windows non-CCS nodes, UNIX)
+                   <ccs_cmd> (Windows CCS nodes)
+----------------------------------------------------------------- 
+MSC Nastran started  Fri May 12 17:07:14 ESAST 2017 
+ 17:07:14  Beginning Analysis
+SCA Kernel 12.0.169560 successfully initialized
+BLAS/LAPACK .dll "c:\msc.software\msc_nastran\20131\msc20131\win64\mkl_core.dll" has been loaded.
+BLAS/LAPACK .dll "c:\msc.software\msc_nastran\20131\msc20131\win64\mkl_intel_thread.dll" has been loaded.
+BLAS/LAPACK .dll "c:\msc.software\msc_nastran\20131\msc20131\win64\mkl_rt.dll" has been loaded.
+BLAS/LAPACK .dll "c:\msc.software\msc_nastran\20131\msc20131\win64\MSCblas.dll" has been loaded.
+
+ 17:07:15  MSC Authorization Information - System Attributes (1004, 0)
+ 17:07:15  -----------------------------------------------------------
+  Date:          Fri May 12 17:07:15 2017
+  MSC Id:        3065ec9795a9 (ethernet) (Intel)
+  Hostname:      LAPTOP-6SBP5HBJ (user saullo, display LAPTOP-6SBP5HBJ)
+  License files: C:\MSC.Software\MSC_Nastran\license.dat
+  CEID:          EC9795A9-DC5F7B9B
+  User:          saullo
+  Display:       LAPTOP-6SBP5HBJ
+  LAPI Version:  LAPI 9.5.0-2137 (FLEXlm 11.9.0.0)
+
+  * * * * * * * * * * * * * * * * * * * *
+  * * * * * * * * * * * * * * * * * * * *
+  * *                                 * *
+  * *   MSC Customer Entitlement ID   * *
+  * *        EC9795A9-DC5F7B9B        * *
+  * *                                 * *
+  * * * * * * * * * * * * * * * * * * * *
+  * * * * * * * * * * * * * * * * * * * *
+
+ 17:07:15  MSC Authorization Information - Checkout Successful (1016, 0)
+ 17:07:15  -------------------------------------------------------------
+ 17:07:15  Acquired 1 license for MSC Nastran from license server on host LAPTOP-6SBP5HBJ
+
+
+ 17:07:16  MSC Authorization Information - Checkout Successful (1016, 0)
+ 17:07:16  -------------------------------------------------------------
+ 17:07:16  Acquired 1 license for MSC Nastran from license server on host LAPTOP-6SBP5HBJ
+
+
+Beginning bulk data processing using the IFPStar component.
+For more information on IFPStar, please see KB article KB8019200
+on our support pages, at http://simcompanion.mscsoftware.com.
+
+ 17:07:16  128 records read from JID file "c:/repositories/meshless/meshless/espim/tests/nastran_plate_16_nodes.dat"
+
+Processing of bulk data entries is complete.
+
+ 17:07:16  Analysis started.
+ 17:07:16  Geometry access/verification to CAD part initiated (if needed).
+ 17:07:16  Geometry access/verification to CAD part successfully completed (if needed).
+ 17:07:16  Finite element model generation started.
+ 17:07:16  Finite element model generated 96 degrees of freedom.
+ 17:07:16  Finite element model generation successfully completed.
+ 17:07:16  Application of Loads and Boundary Conditions to the finite element model started.
+
+ 17:07:17  MSC Authorization Information - Checkout Successful (1016, 0)
+ 17:07:17  -------------------------------------------------------------
+ 17:07:17  Acquired 4 licenses for MSC Nastran SMP from license server on host LAPTOP-6SBP5HBJ
+
+ 17:07:17  Application of Loads and Boundary Conditions to the finite element model successfully completed.
+ 17:07:17  Application of Loads and Boundary Conditions to the finite element model started.
+ 17:07:17  Application of Loads and Boundary Conditions to the finite element model successfully completed.
+ 17:07:17  Solution of the system equations for linear statics started.
+ 17:07:17  Solution of the system equations for linear statics successfully completed.
+ 17:07:17  Solution of the system equations for linear statics started.
+ 17:07:17  Solution of the system equations for linear statics successfully completed.
+ 17:07:17  Solution of the system equations for linear statics started.
+ 17:07:17  Solution of the system equations for linear statics successfully completed.
+ 17:07:17  Solution of the system equations for normal modes started.
+ 17:07:17  Solution of the system equations for normal modes successfully completed.
+ 17:07:17  26 records read from JID file "c:/repositories/meshless/meshless/espim/tests/nastran_plate_16_nodes.dat"
+ 17:07:17  NSEXIT: EXIT(0)
+ 17:07:17  Analysis complete  0
+Real:        2.880 seconds ( 0:00:02.880)
+User:        2.453 seconds ( 0:00:02.453)
+Sys:         0.640 seconds ( 0:00:00.640)
+MSC Nastran finished Fri May 12 17:07:17 ESAST 2017 

@@ -83,7 +83,7 @@ Operating System :: Unix
 """
 
 is_released = True
-version = '0.1.5'
+version = '0.1.10'
 
 fullversion = write_version_py(version, is_released)
 
@@ -92,6 +92,10 @@ data_files = [('', [
         'LICENSE',
         'meshless/version.py',
         ])]
+
+package_data = {
+        '': ['tests/*.*'],
+        }
 
 s = setup(
     name = "meshless",
@@ -103,6 +107,7 @@ s = setup(
     keywords = "es-pim finite element partial diferential equations",
     url = "https://github.com/compmech/meshless",
     packages=find_packages(),
+    package_data=package_data,
     data_files=data_files,
     long_description=read('README.md'),
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],

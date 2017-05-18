@@ -9,8 +9,8 @@ from .read_mesh import getMid
 
 def calc_kG(d, mesh, prop_from_node, silent=True):
     msg('Calculating KG...', silent=silent)
-    n = d.shape[0] // 5
     dof = 5
+    n = d.shape[0] // dof
 
     #TODO allocate less memory here...
     kG = np.zeros((n*dof, n*dof), dtype=np.float64)

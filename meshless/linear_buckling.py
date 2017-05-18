@@ -64,8 +64,7 @@ def lb(K, KG, tol=0, sparse_solver=True, silent=False,
             eigvals, peigvecs = eigsh(A=KG, k=k,
                     which='SM', M=K, tol=tol, sigma=1., mode=mode)
             msg('finished!', level=3, silent=silent)
-            eigvecs = np.zeros((sizebkp, num_eigvalues),
-                               dtype=peigvecs.dtype)
+            eigvecs = np.zeros((sizebkp, num_eigvalues), dtype=peigvecs.dtype)
             eigvecs[used_cols, :] = peigvecs
 
     else:

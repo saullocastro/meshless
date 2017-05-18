@@ -14,7 +14,7 @@ sympy.var('f41, f42, f43, f44')
 sympy.var('A11, A12, A16, A22, A26, A66')
 sympy.var('B11, B12, B16, B22, B26, B66')
 sympy.var('D11, D12, D16, D22, D26, D66')
-sympy.var('G44, G45, G55')
+sympy.var('E44, E45, E55')
 sympy.var('le1, le2, le3, le4, Ac')
 
 su1 =    Matrix([[f11, 0, 0, 0, 0, f12, 0, 0, 0, 0, f13, 0, 0, 0, 0, f14, 0, 0, 0, 0]])
@@ -53,8 +53,8 @@ D = Matrix([[D11, D12, D16],
             [D12, D22, D26],
             [D16, D26, D66]])
 
-G = Matrix([[G44, G45],
-            [G45, G55]])
+E = Matrix([[E44, E45],
+            [E45, E55]])
 
 
 # membrane
@@ -122,6 +122,6 @@ Bs3Tria1 = 1/(2*Ac) * Matrix([
 
 Bs = Matrix([Bs1Tria1.T, Bs2Tria1.T, Bs3Tria1.T]).T
 
-K = Ac*Bs.transpose()*G*Bs
+K = Ac*Bs.transpose()*E*Bs
 print_as_full(K, 'k0s', dofpernode=5)
 

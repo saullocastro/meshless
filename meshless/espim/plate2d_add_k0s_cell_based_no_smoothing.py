@@ -6,10 +6,10 @@ from ..logger import msg
 from ..constants import ZGLOBAL
 
 
-def add_k0s(k0, trias, prop_from_node, silent=True):
+def add_k0s(k0, mesh, prop_from_node, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     dof = 5
-    for tria in trias:
+    for tria in mesh.elements.values():
         # n1 -> n2 -> n3 -> n1
 
         n1, n2, n3 = tria.nodes

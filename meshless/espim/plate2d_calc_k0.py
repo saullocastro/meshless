@@ -8,9 +8,10 @@ from .plate2d import IntegrationPoint, unitvec, area_of_polygon
 from .read_mesh import getMid
 
 
-def calc_k0(nodes, trias, edges, prop_from_node, silent=True):
+def calc_k0(mesh, prop_from_node, silent=True):
     # checking inputs
     msg('Calculating K0...', silent=silent)
+    edges = mesh.edges.values()
     for edge in edges:
         if prop_from_node:
             for node in edge.nodes:
@@ -101,12 +102,13 @@ def calc_k0(nodes, trias, edges, prop_from_node, silent=True):
     # - sorting nodes from a minimum spatial position to a maximum one
     # - Node oject will carry an index that will position it in the global
     #   stiffness matrix
+    nodes = mesh.nodes.values()
     nodes_xyz = np.array([n.xyz for n in nodes])
     index_ref_point = nodes_xyz.min(axis=0)
 
     index_dist = ((nodes_xyz - index_ref_point)**2).sum(axis=-1)
     sort_ind = np.argsort(index_dist)
-    for i, node in enumerate(np.array(nodes)[sort_ind]):
+    for i, node in enumerate(np.array(list(nodes))[sort_ind]):
         node.index = i
 
     n = len(nodes)

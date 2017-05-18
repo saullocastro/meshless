@@ -8,10 +8,10 @@ from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
-def add_k0s(k0, edges, prop_from_node, silent=True):
+def add_k0s(k0, mesh, prop_from_node, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     dof = 5
-    for edge in edges:
+    for edge in mesh.edges.values():
         # sub-tria1: mid1 -> n2 -> n1
         # sub-tria2: mid2 -> n1 -> n2
 

@@ -51,7 +51,7 @@ def read_mesh(filepath, silent=True):
         else:
             raise NotImplementedError('Element type %s not supported' %
                     type(elem))
-    edges = []
+    edges = {}
     edges_ids = defaultdict(list)
     for tria in trias:
         for edge_id in tria.get_edge_ids():
@@ -59,8 +59,8 @@ def read_mesh(filepath, silent=True):
     for (n1, n2), e_trias in edges_ids.items():
         edge = Edge(mesh.nodes[n1], mesh.nodes[n2])
         edge.trias = e_trias
-        edges.append(edge)
-    for edge in edges:
+        edges[(n1, n2)] = edge
+    for edge in edges.values():
         for tria in edge.trias:
             tria.edges.append(edge)
     for tria in trias:
@@ -68,6 +68,6 @@ def read_mesh(filepath, silent=True):
             node.trias.add(tria)
         for edge in tria.edges:
             node.edges.add(edge)
-
+    mesh.edges = edges
     msg('finished!', silent=silent)
-    return nodes, trias, edges
+    return mesh

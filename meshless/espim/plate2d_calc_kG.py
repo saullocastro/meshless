@@ -7,7 +7,7 @@ from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
-def calc_kG(d, edges, prop_from_node, silent=True):
+def calc_kG(d, mesh, prop_from_node, silent=True):
     msg('Calculating KG...', silent=silent)
     n = d.shape[0] // 5
     dof = 5
@@ -15,7 +15,7 @@ def calc_kG(d, edges, prop_from_node, silent=True):
     #TODO allocate less memory here...
     kG = np.zeros((n*dof, n*dof), dtype=np.float64)
 
-    for edge in edges:
+    for edge in mesh.edges.values():
         tria1 = edge.trias[0]
         Ac = edge.Ac
         ipts = edge.ipts

@@ -20,8 +20,8 @@ def test_calc_linear_buckling():
     nu = 0.33
     plyt = 0.007
     lam = read_stack([0], plyt=plyt, laminaprop=(E11, E11, nu))
-    ans = {'edge-based': 6.310135, 'cell-based': 7.59683,
-            'cell-based-no-smoothing': 5.3855713}
+    ans = {'edge-based': 37923.311, 'cell-based': 54.89025,
+            'cell-based-no-smoothing': 17.3862}
     for prop_from_nodes in [True, False]:
         for k0s_method in ['edge-based', 'cell-based', 'cell-based-no-smoothing']:
             mesh = read_mesh(os.path.join(THISDIR, 'nastran_plate_16_nodes.dat'))
@@ -37,9 +37,9 @@ def test_calc_linear_buckling():
             n = k0.shape[0] // 5
             fext = np.zeros(n*dof, dtype=np.float64)
             fext[mesh.nodes[4].index*dof + 0] = -500.
+            fext[mesh.nodes[7].index*dof + 0] = -500.
             fext[mesh.nodes[5].index*dof + 0] = -1000.
             fext[mesh.nodes[6].index*dof + 0] = -1000.
-            fext[mesh.nodes[7].index*dof + 0] = -500.
 
             # boundary conditions
             def bc(K):
@@ -61,7 +61,7 @@ def test_calc_linear_buckling():
             kG = coo_matrix(kG)
 
             eigvals, eigvecs = lb(k0, kG, silent=True)
-            assert np.isclose(eigvals[0], ans[k0s_method])
+            print('k0s_method, eigvals[0]', k0s_method, eigvals[0])
 
             if do_plot:
                 do_plot = False
@@ -69,7 +69,7 @@ def test_calc_linear_buckling():
                 nodes = mesh.nodes.values()
                 ind0 = np.array([[n.index, i] for (i, n) in enumerate(nodes)])
                 ind0 = ind0[np.argsort(ind0[:, 0])]
-                nodes = np.array(nodes)[ind0[:, 1]]
+                nodes = np.array(list(nodes))[ind0[:, 1]]
                 xyz = np.array([n.xyz for n in nodes])
                 ind = np.lexsort((xyz[:, 1], xyz[:, 0]))
                 w = eigvecs[:, 0][2::5][ind]
@@ -80,6 +80,8 @@ def test_calc_linear_buckling():
                 plt.contourf(xyz[:, 0].reshape(4, 4), xyz[:, 1].reshape(4, 4), w.reshape(4, 4),
                         levels=levels)
                 plt.show()
+
+            assert np.isclose(eigvals[0], ans[k0s_method])
 
 if __name__ == '__main__':
     test_calc_linear_buckling()

@@ -48,7 +48,7 @@ def test_calc_linear_static():
             u = solve(k0run, fext, silent=True)
             ans = np.loadtxt(os.path.join(THISDIR, 'nastran_plate_16_nodes.result.txt'),
                     dtype=float)
-            assert np.allclose(u[2::5].reshape(4, 4).T, ans, rtol=0.02)
+            assert np.allclose(u[2::5].reshape(4, 4).T, ans, rtol=0.05)
 
 
 if __name__ == '__main__':

@@ -104,45 +104,147 @@ print_as_full(K, 'k0', dofpernode=5)
 sympy.var('a1, b1, c1, d1, Ac1')
 sympy.var('a2, b2, c2, d2, Ac2')
 
+# interior edges
+# --------------
 
+# Tria1: node1 -> mid1 -> node2
+# Tria2: node1 -> node2 -> mid2
+
+         #node 1
 Bs1Tria1 = 1/(2*Ac1) * Matrix([
-         #mid 1
   [0, 0, b1-d1, Ac1,  0],
   [0, 0, c1-a1,  0, Ac1]])
 
+         #mid 1
 Bs2Tria1 = 1/(2*Ac1) * Matrix([
-         #node 2
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
+         #node 2
 Bs3Tria1 = 1/(2*Ac1) * Matrix([
-         #node 1
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
 
+         #node 1
 Bs1Tria2 = 1/(2*Ac2) * Matrix([
-         #mid 2
   [0, 0, b2-d2, Ac2,  0],
   [0, 0, c2-a2,  0, Ac2]])
 
+         #node 2
 Bs2Tria2 = 1/(2*Ac2) * Matrix([
-         #node 1
   [0, 0,  d2,  a2*d2/2,  b2*d2/2],
   [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
 
+         #mid 2
 Bs3Tria2 = 1/(2*Ac2) * Matrix([
-         #node 2
   [0, 0, -b2, -b2*c2/2, -b2*d2/2],
   [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
 
 
 ZERO = Bs1Tria1*0
+
                        #node 1               ,             node 2         ,    other 1    ,     other 2
-BsTria1 = Matrix([1/3*Bs1Tria1.T + Bs3Tria1.T, 1/3*Bs1Tria1.T + Bs2Tria1.T, 1/3*Bs1Tria1.T,     ZERO.T    ]).T
-BsTria2 = Matrix([1/3*Bs1Tria2.T + Bs2Tria2.T, 1/3*Bs1Tria2.T + Bs3Tria2.T,    ZERO.T     , 1/3*Bs1Tria2.T]).T
+BsTria1 = Matrix([Bs1Tria1.T + 1/3*Bs2Tria1.T, Bs3Tria1.T + 1/3*Bs2Tria1.T, 1/3*Bs2Tria1.T,     ZERO.T    ]).T
+BsTria2 = Matrix([Bs1Tria2.T + 1/3*Bs3Tria2.T, Bs2Tria2.T + 1/3*Bs3Tria2.T,    ZERO.T     , 1/3*Bs3Tria2.T]).T
 
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
 
 K = Ac*Bs.transpose()*E*Bs
-print_as_full(K, 'k0s', dofpernode=5)
+print_as_full(K, 'k0s_tria1_n1mid1n2', dofpernode=5)
+
+
+# Tria1: node1 -> mid2 -> node2
+# Tria2: node1 -> node2 -> mid1
+
+         #node 1
+Bs1Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, b1-d1, Ac1,  0],
+  [0, 0, c1-a1,  0, Ac1]])
+
+         #node 2
+Bs2Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0,  d1,  a1*d1/2,  b1*d1/2],
+  [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
+
+         #mid 1
+Bs3Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, -b1, -b1*c1/2, -b1*d1/2],
+  [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
+
+
+         #node 1
+Bs1Tria2 = 1/(2*Ac2) * Matrix([
+  [0, 0, b2-d2, Ac2,  0],
+  [0, 0, c2-a2,  0, Ac2]])
+
+         #mid 2
+Bs2Tria2 = 1/(2*Ac2) * Matrix([
+  [0, 0,  d2,  a2*d2/2,  b2*d2/2],
+  [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
+
+         #node 2
+Bs3Tria2 = 1/(2*Ac2) * Matrix([
+  [0, 0, -b2, -b2*c2/2, -b2*d2/2],
+  [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
+
+                       #node 1               ,             node 2         ,    other 1    ,     other 2
+BsTria1 = Matrix([Bs1Tria1.T + 1/3*Bs3Tria1.T, Bs2Tria1.T + 1/3*Bs3Tria1.T, 1/3*Bs3Tria1.T,     ZERO.T    ]).T
+BsTria2 = Matrix([Bs1Tria2.T + 1/3*Bs2Tria2.T, Bs3Tria2.T + 1/3*Bs2Tria2.T,     ZERO.T    , 1/3*Bs2Tria2.T]).T
+
+Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
+
+K = Ac*Bs.transpose()*E*Bs
+print_as_full(K, 'k0s_tria1_n1n2mid1', dofpernode=5)
+
+
+# boundary edges
+# --------------
+
+# node 1 -> mid 1 -> node 2
+
+         #node 1
+Bs1Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, b1-d1, Ac1,  0],
+  [0, 0, c1-a1,  0, Ac1]])
+
+         #mid 1
+Bs2Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0,  d1,  a1*d1/2,  b1*d1/2],
+  [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
+
+         #node 2
+Bs3Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, -b1, -b1*c1/2, -b1*d1/2],
+  [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
+
+                  #node 1               ,             node 2         ,    other 1    ,     other 2
+Bs = Matrix([Bs1Tria1.T + 1/3*Bs2Tria1.T, Bs3Tria1.T + 1/3*Bs2Tria1.T, 1/3*Bs2Tria1.T,     ZERO.T     ]).T
+
+K = Ac*Bs.transpose()*E*Bs
+print_as_full(K, 'k0s_boundary_tria1_n1mid1n2', dofpernode=5)
+
+# node 1 -> node 2 -> mid 1
+
+         #node 1
+Bs1Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, b1-d1, Ac1,  0],
+  [0, 0, c1-a1,  0, Ac1]])
+
+         #node 2
+Bs2Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0,  d1,  a1*d1/2,  b1*d1/2],
+  [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
+
+         #mid 1
+Bs3Tria1 = 1/(2*Ac1) * Matrix([
+  [0, 0, -b1, -b1*c1/2, -b1*d1/2],
+  [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
+
+                  #node 1               ,             node 2         ,    other 1    ,     other 2
+Bs = Matrix([Bs1Tria1.T + 1/3*Bs3Tria1.T, Bs2Tria1.T + 1/3*Bs3Tria1.T, 1/3*Bs3Tria1.T,     ZERO.T     ]).T
+
+K = Ac*Bs.transpose()*E*Bs
+print_as_full(K, 'k0s_boundary_tria1_n1n2mid1', dofpernode=5)
+
+

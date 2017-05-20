@@ -1,6 +1,6 @@
 |  Version	| Download | Travis CI | Test Coverage |
 | :-------:	| :--- 	   | :---      | :---          |
-|   0.1.16	|          | [![Linux Status](https://img.shields.io/travis/compmech/meshless/0.1.16.svg)](https://travis-ci.org/compmech/meshless) | [![Coverage Status](https://coveralls.io/repos/github/compmech/meshless/badge.svg?branch=0.1.16)](https://coveralls.io/github/compmech/meshless?branch=0.1.16) |
+|   0.1.17	|          | [![Linux Status](https://img.shields.io/travis/compmech/meshless/0.1.17.svg)](https://travis-ci.org/compmech/meshless) | [![Coverage Status](https://coveralls.io/repos/github/compmech/meshless/badge.svg?branch=0.1.17)](https://coveralls.io/github/compmech/meshless?branch=0.1.17) |
 |   Master	|          | [![Linux Status](https://img.shields.io/travis/compmech/meshless/master.svg)](https://travis-ci.org/compmech/meshless) | [![Coverage Status](https://coveralls.io/repos/github/compmech/meshless/badge.svg?branch=master)](https://coveralls.io/github/compmech/meshless?branch=master) |
 
 

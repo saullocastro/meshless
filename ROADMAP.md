@@ -1,0 +1,4 @@
+- Add Jupyter Notebooks with examples
+- ESPIM for general 3D shell models
+- ESPIM for 3D tetrahedrons
+- move core of ESPIM to Cython

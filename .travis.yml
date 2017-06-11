@@ -25,11 +25,7 @@ install:
   - source activate test-environment
   - pip install pytest
   - pip install coveralls
-  - git clone https://github.com/SteveDoyle2/pyNastran.git
-  - cd pyNastran
-  - python setup_no_gui.py install
-  - cd ..
-  - rm -rf ./pyNastran
+  - pip install pynastran
   - python setup.py install
 
 script:

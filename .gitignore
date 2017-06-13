@@ -5,6 +5,7 @@ dist
 .coverage
 *.egg-info
 # Temp files
+.ipynb_checkpoints
 tmp*
 temp*
 tmp*.*

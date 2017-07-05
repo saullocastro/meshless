@@ -124,12 +124,13 @@ def test_plate_from_zero():
     print('First 5 eigenvalues')
     print('\n'.join(map(str, eigvals[:5])))
 
-    assert np.allclose(eigvals[:5],
-        [1359.93926728,
-         3026.16341729,
-         4842.76641846,
-         6723.88235751,
-         7901.44934559]
+    assert np.allclose(eigvals[:5], [
+        1357.88861842,
+        3024.52229631,
+        4831.59778558,
+        6687.33417597,
+        7885.32591511,
+        ]
             )
 
 

@@ -15,7 +15,6 @@ from meshless.espim.plate2d_add_k0s import add_k0s
 THISDIR = os.path.dirname(inspect.getfile(inspect.currentframe()))
 
 def test_calc_linear_buckling():
-    do_plot = False
     E11 = 71.e9
     nu = 0.33
     plyt = 0.007
@@ -62,24 +61,6 @@ def test_calc_linear_buckling():
 
             eigvals, eigvecs = lb(k0, kG, silent=True)
             print('k0s_method, eigvals[0]', k0s_method, eigvals[0])
-
-            if do_plot:
-                do_plot = False
-                import matplotlib.pyplot as plt
-                nodes = mesh.nodes.values()
-                ind0 = np.array([[n.index, i] for (i, n) in enumerate(nodes)])
-                ind0 = ind0[np.argsort(ind0[:, 0])]
-                nodes = np.array(list(nodes))[ind0[:, 1]]
-                xyz = np.array([n.xyz for n in nodes])
-                ind = np.lexsort((xyz[:, 1], xyz[:, 0]))
-                w = eigvecs[:, 0][2::5][ind]
-                #w = d[0::5][ind]
-                xyz = xyz[ind]
-                levels = np.linspace(w.min(), w.max(), 400)
-                plt.figure(dpi=100)
-                plt.contourf(xyz[:, 0].reshape(4, 4), xyz[:, 1].reshape(4, 4), w.reshape(4, 4),
-                        levels=levels)
-                plt.show()
 
             assert np.isclose(eigvals[0], ans[k0s_method])
 

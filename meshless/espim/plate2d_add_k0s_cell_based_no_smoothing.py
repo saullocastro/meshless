@@ -27,17 +27,20 @@ def add_k0s(k0, mesh, prop_from_node, silent=True):
         c1 = x3 - x1
         d1 = y3 - y1
 
-        k = 5/6
         if prop_from_node:
             pn1 = n1.prop
             pn2 = n2.prop
             pn3 = n3.prop
-            E = k * (1/3*pn1.E + 1/3*pn2.E + 1/3*pn3.E)
+            k13 = 1/3*pn1.scf_k13 + 1/3*pn2.scf_k13 + 1/3*pn3.scf_k13
+            k23 = 1/3*pn1.scf_k23 + 1/3*pn2.scf_k23 + 1/3*pn3.scf_k23
+            E = 1/3*pn1.E + 1/3*pn2.E + 1/3*pn3.E
         else:
-            E = k * tria.prop.E
-        E44 = E[0, 0]
-        E45 = E[0, 1]
-        E55 = E[1, 1]
+            k13 = tria.prop.scf_k13
+            k23 = tria.prop.scf_k23
+            E = tria.prop.E
+        E44 = k13 * E[0, 0]
+        E45 = min(k13, k23) * E[0, 1]
+        E55 = k23 * E[1, 1]
 
         i1 = n1.index
         i2 = n2.index

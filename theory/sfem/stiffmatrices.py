@@ -3,7 +3,7 @@
 import sympy
 from sympy import Matrix
 
-from pim.sympytools import print_as_sparse, print_as_array, print_as_full
+from meshless.sympytools import print_as_sparse, print_as_array, print_as_full
 
 sympy.var('u, v, w, phix, phiy')
 sympy.var('f11, f12, f13')

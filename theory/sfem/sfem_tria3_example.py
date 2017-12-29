@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import coo_matrix
 
-from pim.composite.laminate import read_stack
-from pim.sparse import solve
+from meshless.composite.laminate import read_stack
+from meshless.sparse import solve
 
 
 XGLOBAL = np.array([1., 0, 0])

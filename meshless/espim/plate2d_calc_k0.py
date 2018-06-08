@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division
 
 import numpy as np
+from numba import jit
 
 from ..logger import msg
 from ..constants import ZGLOBAL
@@ -8,6 +9,7 @@ from .plate2d import IntegrationPoint, unitvec, area_of_polygon
 from .read_mesh import getMid
 
 
+@jit
 def calc_k0(mesh, prop_from_node, silent=True):
     # checking inputs
     msg('Calculating K0...', silent=silent)

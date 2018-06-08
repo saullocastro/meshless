@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division
 
 import numpy as np
+from numba import jit
 
 from ..logger import msg
 from ..constants import ZGLOBAL
@@ -8,6 +9,7 @@ from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
+@jit
 def add_k0s(k0, mesh, prop_from_node, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     dof = 5

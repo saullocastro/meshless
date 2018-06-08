@@ -1,12 +1,14 @@
 from __future__ import absolute_import, division
 
 import numpy as np
+from numba import jit
 
 from ..logger import msg
 from .plate2d import area_of_polygon
 from .read_mesh import getMid
 
 
+@jit
 def calc_kG(d, mesh, prop_from_node, silent=True):
     msg('Calculating KG...', silent=silent)
     dof = 5

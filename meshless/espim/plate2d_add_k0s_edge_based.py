@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division
 
 import numpy as np
+from numba import jit
 
 from ..logger import msg
 from ..constants import ZGLOBAL
@@ -10,6 +11,7 @@ from .read_mesh import getMid
 dof = 5
 
 
+@jit
 def boundary_edge(k0, edge, n1, n2, prop_from_node):
     # sub-tria1: mid1 -> node1 -> node2
     tria1 = edge.trias[0]
@@ -130,6 +132,7 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node):
     k0[i3*dof+4, i3*dof+4] += 0.0277777777777778*Ac*E55
 
 
+@jit
 def interior_edge(k0, edge, n1, n2, prop_from_node):
     # sub-tria1: mid1 -> node1 -> node2
     # sub-tria2: node1 -> mid2 -> node2
@@ -333,6 +336,7 @@ def interior_edge(k0, edge, n1, n2, prop_from_node):
     k0[i4*dof+4, i4*dof+4] += -0.0833333333333333*b2*c2*(0.0833333333333333*E45*b2*d2 - 0.0833333333333333*E55*b2*c2)/Ac + 0.0833333333333333*b2*d2*(0.0833333333333333*E44*b2*d2 - 0.0833333333333333*E45*b2*c2)/Ac
 
 
+@jit
 def add_k0s(k0, mesh, prop_from_node, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     for edge in mesh.edges.values():

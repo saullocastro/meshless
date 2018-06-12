@@ -14,8 +14,8 @@ from .matlamina import read_laminaprop
 from meshless.constants import DOUBLE
 
 
-def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
-               offset=0.):
+def read_stack(stack, plyt=None, laminaprop=None, plyts=None, laminaprops=None,
+               offset=0., calc_scf=True):
     """Read a laminate stacking sequence data.
 
     An ``Laminate`` object is returned based on the inputs given.
@@ -36,6 +36,9 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
     offset : float, optional
         Offset along the normal axis about the mid-surface, which influences
         the laminate properties.
+    calc_scf : bool, optional
+        If True, use :method:`.Laminate.calc_scf` to compute shear correction
+        factors, otherwise the default value of 5/6 is used
 
     Notes
     -----
@@ -55,14 +58,14 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
     lam.offset = offset
     lam.stack = stack
 
-    if not plyts:
-        if not plyt:
+    if plyts is None:
+        if plyt is None:
             raise ValueError('plyt or plyts must be supplied')
         else:
             plyts = [plyt for i in stack]
 
-    if not laminaprops:
-        if not laminaprop:
+    if laminaprops is None:
+        if laminaprop is None:
             raise ValueError('laminaprop or laminaprops must be supplied')
         else:
             laminaprops = [laminaprop for i in stack]
@@ -78,7 +81,8 @@ def read_stack(stack, plyt=None, laminaprop=None, plyts=[], laminaprops=[],
 
     lam.rebuild()
     lam.calc_constitutive_matrix()
-    lam.calc_scf()
+    if calc_scf:
+        lam.calc_scf()
 
     return lam
 
@@ -186,7 +190,7 @@ class Laminate(object):
 
 
     def calc_scf(self):
-        """Calculate shear correction factors
+        """Calculate improved shear correction factors
 
         Reference:
 

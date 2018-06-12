@@ -10,6 +10,8 @@ def add_k0s(k0, mesh, prop_from_node, method='cell-based'):
         return add_k0s_cell_no_smoothing(k0, mesh, prop_from_node)
     elif method == 'edge-based':
         return add_k0s_edge(k0, mesh, prop_from_node)
+    else:
+        raise ValueError('Invalid method')
 
 
 

@@ -25,7 +25,10 @@ class Edge(object):
         return self.__str__()
 
     def getMid(self):
-        return 0.5*(self.n1 + self.n2)
+        try:
+            return 0.5*(self.n1 + self.n2)
+        except:
+            return 0.5*(self.n1.xyz + self.n2.xyz)
 
 
 def getMid(tria):

@@ -1,3 +1,5 @@
+- Use common solvers from the compmech/structsolve library
+- Use compmech/composites
 - Add Jupyter Notebooks with examples
 - ESPIM for general 3D shell models
 - ESPIM for 3D tetrahedrons

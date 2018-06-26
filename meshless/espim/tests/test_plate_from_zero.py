@@ -30,9 +30,8 @@ def test_plate_from_zero():
 
     from scipy.sparse import coo_matrix
 
-    from meshless.composite.laminate import read_stack
-    from meshless.sparse import solve
-    from meshless.linear_buckling import lb
+    from composites.laminate import read_stack
+    from structsolve import solve, lb
     from meshless.espim.read_mesh import read_delaunay
     from meshless.espim.plate2d_calc_k0 import calc_k0
     from meshless.espim.plate2d_calc_kG import calc_kG
@@ -125,11 +124,11 @@ def test_plate_from_zero():
     print('\n'.join(map(str, eigvals[:5])))
 
     assert np.allclose(eigvals[:5], [
-        1357.88861842,
-        3024.52229631,
-        4831.59778558,
-        6687.33417597,
-        7885.32591511,
+        1004.29332981,
+        1822.11577078,
+        2898.3728806,
+        2947.17499169,
+        3297.54959342,
         ]
             )
 

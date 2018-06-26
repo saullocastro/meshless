@@ -48,7 +48,12 @@ def test_calc_linear_static():
             u = solve(k0run, fext, silent=True)
             ans = np.loadtxt(os.path.join(THISDIR, 'nastran_plate_16_nodes.result.txt'),
                     dtype=float)
-            assert np.allclose(u[2::5].reshape(4, 4).T, ans, rtol=0.05)
+            xyz = np.array([n.xyz for n in mesh.nodes.values()])
+            ind = np.lexsort((xyz[:, 1], xyz[:, 0]))
+            xyz = xyz[ind]
+            nodes = np.array(list(mesh.nodes.values()))[ind]
+            pick = [n.index for n in nodes]
+            assert np.allclose(u[2::5][pick].reshape(4, 4).T, ans, rtol=0.05)
 
 
 if __name__ == '__main__':

@@ -50,12 +50,11 @@ def calc_k0(mesh, prop_from_node, silent=True):
         sdomain = []
 
         # to guarantee outward normals
-        sign = 1
         if np.dot(np.cross((mid1 - node2.xyz), (node1.xyz - node2.xyz)), ZGLOBAL) < 0:
-            sign = -1
+            node1, node2 = node2, node1
 
         tmpvec = (node1.xyz - mid1)
-        nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+        nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
         sdomain.append(node1.xyz)
         sdomain.append(mid1)
         le = np.sqrt(((node1.xyz - mid1)**2).sum())
@@ -63,7 +62,7 @@ def calc_k0(mesh, prop_from_node, silent=True):
         ipts.append(ipt)
 
         tmpvec = (mid1 - node2.xyz)
-        nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+        nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
         sdomain.append(node2.xyz)
         le = np.sqrt(((mid1 - node2.xyz)**2).sum())
         ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/6, 2/3, 1/6, nx, ny, nz, le)
@@ -71,21 +70,21 @@ def calc_k0(mesh, prop_from_node, silent=True):
 
         if tria2 is None:
             tmpvec = (node2.xyz - node1.xyz)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((node2.xyz - node1.xyz)**2).sum())
             ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/2, 1/2, 0, nx, ny, nz, le)
             ipts.append(ipt)
         else:
             tmpvec = (node2.xyz - mid2)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(mid2)
             le = np.sqrt(((node2.xyz - mid2)**2).sum())
             ipt = IntegrationPoint(tria2, node1, node2, othernode2, 1/6, 2/3, 1/6, nx, ny, nz, le)
             ipts.append(ipt)
 
             tmpvec = (mid2 - node1.xyz)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((mid2 - node1.xyz)**2).sum())
             ipt = IntegrationPoint(tria2, node1, node2, othernode2, 2/3, 1/6, 1/6, nx, ny, nz, le)
@@ -107,7 +106,7 @@ def calc_k0(mesh, prop_from_node, silent=True):
     index_ref_point = nodes_xyz.min(axis=0)
 
     index_dist = ((nodes_xyz - index_ref_point)**2).sum(axis=-1)
-    sort_ind = np.argsort(index_dist)
+    sort_ind = np.arange(len(index_dist))
     for i, node in enumerate(np.array(list(nodes))[sort_ind]):
         node.index = i
 
@@ -120,7 +119,6 @@ def calc_k0(mesh, prop_from_node, silent=True):
     for edge in edges:
         tria1 = edge.trias[0]
         Ac = edge.Ac
-        ipts = edge.ipts
         mid1 = getMid(tria1)
         tmp = np.array([mid1, edge.n2.xyz, edge.n1.xyz])
         Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
@@ -133,6 +131,7 @@ def calc_k0(mesh, prop_from_node, silent=True):
             Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
         else:
             raise RuntimeError('Found %d trias for edge' % len(edge.trias))
+        ipts = edge.ipts
         indices = set()
         for ipt in ipts:
             indices.add(ipt.n1.index)

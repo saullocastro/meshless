@@ -10,7 +10,7 @@ from .read_mesh import getMid
 dof = 5
 
 
-def boundary_edge(k0, edge, n1, n2, prop_from_node):
+def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha):
     # sub-tria1: mid1 -> node1 -> node2
     tria1 = edge.trias[0]
     mid1 = getMid(tria1)
@@ -47,7 +47,6 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node):
     E45 = min(k13, k23) * E[0, 1]
     E55 = k23 * E[1, 1]
 
-    alpha = 0.2 # See study from Lyly et al.
     maxl = max([ipt.le for ipt in edge.ipts])
     E44 = h**2 / (h**2 + alpha*maxl**2) * E44
     E45 = h**2 / (h**2 + alpha*maxl**2) * E45
@@ -136,7 +135,7 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node):
     k0[i3*dof+4, i3*dof+4] += 0.0277777777777778*Ac*E55
 
 
-def interior_edge(k0, edge, n1, n2, prop_from_node):
+def interior_edge(k0, edge, n1, n2, prop_from_node, alpha):
     # sub-tria1: mid1 -> node1 -> node2
     # sub-tria2: node1 -> mid2 -> node2
     tria1 = edge.trias[0]
@@ -194,7 +193,6 @@ def interior_edge(k0, edge, n1, n2, prop_from_node):
     E45 = min(k13, k23) * E[0, 1]
     E55 = k23 * E[1, 1]
 
-    alpha = 0.2 # See study from Lyly et al.
     maxl = max(max([ipt.le for ipt in edge.ipts]), np.sum((edge.n1.xyz - edge.n2.xyz)**2)**0.5)
     E44 = h**2 / (h**2 + alpha*maxl**2) * E44
     E45 = h**2 / (h**2 + alpha*maxl**2) * E45
@@ -346,7 +344,7 @@ def interior_edge(k0, edge, n1, n2, prop_from_node):
     k0[i4*dof+4, i4*dof+4] += -0.0833333333333333*b2*c2*(0.0833333333333333*E45*b2*d2 - 0.0833333333333333*E55*b2*c2)/Ac + 0.0833333333333333*b2*d2*(0.0833333333333333*E44*b2*d2 - 0.0833333333333333*E45*b2*c2)/Ac
 
 
-def add_k0s(k0, mesh, prop_from_node, silent=True):
+def add_k0s(k0, mesh, prop_from_node, alpha, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     for edge in mesh.edges.values():
         n1 = edge.n1
@@ -355,9 +353,9 @@ def add_k0s(k0, mesh, prop_from_node, silent=True):
         if np.dot(np.cross((n2.xyz - n1.xyz), (mid1 - n1.xyz)), ZGLOBAL) < 0:
             n2, n1 = n1, n2
         if len(edge.trias) == 1:
-            boundary_edge(k0, edge, n1, n2, prop_from_node)
+            boundary_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha)
         elif len(edge.trias) == 2:
-            interior_edge(k0, edge, n1, n2, prop_from_node)
+            interior_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha)
         else:
             raise NotImplementedError('')
 

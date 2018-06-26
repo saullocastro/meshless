@@ -6,7 +6,7 @@ from ..logger import msg
 from ..constants import ZGLOBAL
 
 
-def add_k0s(k0, mesh, prop_from_node, silent=True):
+def add_k0s(k0, mesh, prop_from_node, alpha, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     dof = 5
     for tria in mesh.elements.values():
@@ -45,7 +45,6 @@ def add_k0s(k0, mesh, prop_from_node, silent=True):
         E45 = min(k13, k23) * E[0, 1]
         E55 = k23 * E[1, 1]
 
-        alpha = 0.2 # See study from Lyly et al.
         maxl = max([np.sum((e.n1.xyz - e.n2.xyz)**2)**0.5 for e in tria.edges])
         E44 = h**2 / (h**2 + alpha*maxl**2) * E44
         E45 = h**2 / (h**2 + alpha*maxl**2) * E45

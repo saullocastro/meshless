@@ -119,20 +119,19 @@ def calc_kG(d, mesh, prop_from_node, silent=True):
         phix_c = dc[:, 3]
         phiy_c = dc[:, 4]
 
-        em = np.zeros(3)
         les = np.array([le1, le2, le3, le4])
         nx = np.array([nx1, nx2, nx3, nx4])
         ny = np.array([ny1, ny2, ny3, ny4])
 
         em = np.zeros(3)
-        em[0] = (1/Ac*les*nx*u_c).sum()
-        em[1] = (1/Ac*les*ny*v_c).sum()
-        em[2] = (1/Ac*les*(ny*u_c + nx*v_c)).sum()
+        em[0] = 1/Ac*(les*nx*u_c).sum()
+        em[1] = 1/Ac*(les*ny*v_c).sum()
+        em[2] = 1/Ac*(les*(ny*u_c + nx*v_c)).sum()
 
         eb = np.zeros(3)
-        eb[0] = (1/Ac*les*nx*phix_c).sum()
-        eb[1] = (1/Ac*les*ny*phiy_c).sum()
-        eb[2] = (1/Ac*les*(ny*phix_c + nx*phiy_c)).sum()
+        eb[0] = 1/Ac*(les*nx*phix_c).sum()
+        eb[1] = 1/Ac*(les*ny*phiy_c).sum()
+        eb[2] = 1/Ac*(les*(ny*phix_c + nx*phiy_c)).sum()
 
         Nxx, Nyy, Nxy = np.dot(A, em) + np.dot(B, eb)
 
@@ -154,6 +153,6 @@ def calc_kG(d, mesh, prop_from_node, silent=True):
         kG[i4*dof+2, i3*dof+2] += Ac*((Nxx*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nxy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f13*le1*nx1 + f23*le2*nx2 + f33*le3*nx3 + f43*le4*nx4)/Ac + (Nxy*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nyy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f13*le1*ny1 + f23*le2*ny2 + f33*le3*ny3 + f43*le4*ny4)/Ac)
         kG[i4*dof+2, i4*dof+2] += Ac*((Nxx*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nxy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + (Nxy*(f14*le1*nx1 + f24*le2*nx2 + f34*le3*nx3 + f44*le4*nx4)/Ac + Nyy*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)*(f14*le1*ny1 + f24*le2*ny2 + f34*le3*ny3 + f44*le4*ny4)/Ac)
 
-        msg('finished!', silent=silent)
+    msg('finished!', silent=silent)
     return kG
 

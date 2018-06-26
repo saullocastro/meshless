@@ -52,10 +52,8 @@ B = Matrix([[B11, B12, B16],
 D = Matrix([[D11, D12, D16],
             [D12, D22, D26],
             [D16, D26, D66]])
-
 E = Matrix([[E44, E45],
             [E45, E55]])
-
 
 # membrane
 
@@ -107,60 +105,58 @@ sympy.var('a3, b3, c3, d3, Ac3')
 
 
          #mid
-Bs1Tria1 = 1/(2*Ac1) * Matrix([
+Tria1Mid = 1/(2*Ac1) * Matrix([
   [0, 0, b1-d1, Ac1,  0],
   [0, 0, c1-a1,  0, Ac1]])
 
          #node 1
-Bs2Tria1 = 1/(2*Ac1) * Matrix([
+Tria1N1 = 1/(2*Ac1) * Matrix([
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
          #node 2
-Bs3Tria1 = 1/(2*Ac1) * Matrix([
+Tria1N2 = 1/(2*Ac1) * Matrix([
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
 
 
          #mid
-Bs1Tria2 = 1/(2*Ac2) * Matrix([
+Tria2Mid = 1/(2*Ac2) * Matrix([
   [0, 0, b2-d2, Ac2,  0],
   [0, 0, c2-a2,  0, Ac2]])
 
          #node 2
-Bs2Tria2 = 1/(2*Ac2) * Matrix([
+Tria2N2 = 1/(2*Ac2) * Matrix([
   [0, 0,  d2,  a2*d2/2,  b2*d2/2],
   [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
 
          #node 3
-Bs3Tria2 = 1/(2*Ac2) * Matrix([
+Tria2N3 = 1/(2*Ac2) * Matrix([
   [0, 0, -b2, -b2*c2/2, -b2*d2/2],
   [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
 
 
 
          #mid
-Bs1Tria3 = 1/(2*Ac3) * Matrix([
+Tria3Mid = 1/(2*Ac3) * Matrix([
   [0, 0, b3-d3, Ac3,  0],
   [0, 0, c3-a3,  0, Ac3]])
 
          #node 3
-Bs2Tria3 = 1/(2*Ac3) * Matrix([
+Tria3N3 = 1/(2*Ac3) * Matrix([
   [0, 0,  d3,  a3*d3/2,  b3*d3/2],
   [0, 0, -c3, -a3*c3/2, -b3*c3/2]])
 
          #node 1
-Bs3Tria3 = 1/(2*Ac3) * Matrix([
+Tria3N1 = 1/(2*Ac3) * Matrix([
   [0, 0, -b3, -b3*c3/2, -b3*d3/2],
   [0, 0,  a3,  a3*c3/2,  a3*d3/2]])
 
 
-BsTria1 = Matrix([1/3*Bs1Tria1.T + Bs2Tria1.T, 1/3*Bs1Tria1.T + Bs3Tria1.T, 1/3*Bs1Tria1.T]).T
-
-BsTria2 = Matrix([1/3*Bs1Tria2.T, 1/3*Bs1Tria2.T + Bs2Tria2.T, 1/3*Bs1Tria2.T + Bs3Tria2.T]).T
-
-BsTria3 = Matrix([1/3*Bs1Tria3.T + Bs3Tria3.T, 1/3*Bs1Tria3.T, 1/3*Bs1Tria3.T + Bs2Tria3.T]).T
+BsTria1 = Matrix([1/3*Tria1Mid.T + Tria1N1.T, 1/3*Tria1Mid.T + Tria1N2.T, 1/3*Tria1Mid.T            ]).T
+BsTria2 = Matrix([1/3*Tria2Mid.T            , 1/3*Tria2Mid.T + Tria2N2.T, 1/3*Tria2Mid.T + Tria2N3.T]).T
+BsTria3 = Matrix([1/3*Tria3Mid.T + Tria3N1.T, 1/3*Tria3Mid.T            , 1/3*Tria3Mid.T + Tria3N3.T]).T
 
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2 + Ac3*BsTria3)
 

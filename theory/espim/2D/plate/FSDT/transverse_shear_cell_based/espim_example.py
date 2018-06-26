@@ -9,16 +9,26 @@
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from scipy.sparse import coo_matrix
+from structsolve import solve, lb
 
-from meshless.composite.laminate import read_stack
-from meshless.sparse import solve
-from meshless.linear_buckling import lb
+from composites.laminate import read_stack
 
 
-XGLOBAL = np.array([1., 0, 0])
-YGLOBAL = np.array([0, 1., 0])
-ZGLOBAL = np.array([0, 0, 1.])
+XGLOBAL = np.array([1., 0., 0.])
+YGLOBAL = np.array([0., 1., 0.])
+ZGLOBAL = np.array([0., 0., 1.])
+
+# geometric properties
+a = 7.
+b = 2.
+
+# material properties
+E11 = 71.e9
+nu = 0.33
+plyt = 0.007
+lam = read_stack([0], plyt=plyt, laminaprop=(E11, E11, nu))
 
 
 def area_of_polygon(x, y):
@@ -121,11 +131,8 @@ class Node(object):
     def __lmul__(self, val):
         return self.__rmul__(val)
 
-a = 7.
-b = 2.
 
-
-plt.figure(dpi=300)
+plt.figure(dpi=300, figsize=(8, 4))
 
 nodes = np.array([
         Node(0, 0, 0),
@@ -352,11 +359,6 @@ for i, node in enumerate(nodes):
 n = nodes.shape[0]
 dof = 5
 
-# material properties
-E11 = 71.e9
-nu = 0.33
-plyt = 0.007
-lam = read_stack([0], plyt=plyt, laminaprop=(E11, E11, nu))
 prop = Property(lam.A, lam.B, lam.D, lam.E)
 for tria in trias:
     tria.prop = prop
@@ -925,7 +927,11 @@ for subcase in (1, 2, 3):
 
         # boundary conditions
         for i in [0, 4, 8, 12]:
-            for j in [0, 1, 2, 3]:
+            for j in [0, 1, 2]:
+                k0run[nodes[i].index*dof+j, :] = 0
+                k0run[:, nodes[i].index*dof+j] = 0
+        for i in [1, 2, 3, 7, 11, 13, 14, 15]:
+            for j in [2]:
                 k0run[nodes[i].index*dof+j, :] = 0
                 k0run[:, nodes[i].index*dof+j] = 0
 
@@ -936,7 +942,6 @@ for subcase in (1, 2, 3):
         ycord = np.array([node.pos[1] for node in nodes])
         wmin = u[puvw::dof].min()
         wmax = u[puvw::dof].max()
-        levels = np.linspace(wmin, wmax, 400)
         print(u[puvw::dof].reshape(4, 4))
 
 
@@ -950,23 +955,18 @@ for subcase in (1, 2, 3):
 
         # boundary conditions
         for i in [0, 4, 8, 12]:
-            for j in [0, 1, 2, 3]:
+            for j in [0, 1, 2]:
                 k0run[nodes[i].index*dof+j, :] = 0
                 k0run[:, nodes[i].index*dof+j] = 0
-        for i in [3, 7, 11, 15]:
-            for j in [0, 1, 2]:
+        for i in [1, 2, 3, 7, 11, 13, 14, 15]:
+            for j in [2]:
                 k0run[nodes[i].index*dof+j, :] = 0
                 k0run[:, nodes[i].index*dof+j] = 0
 
         k0run = coo_matrix(k0run)
         u = solve(k0run, fext, silent=True)
-
         xcord = np.array([node.pos[0] for node in nodes])
         ycord = np.array([node.pos[1] for node in nodes])
-        wmin = u[puvw::dof].min()
-        wmax = u[puvw::dof].max()
-        levels = np.linspace(wmin, wmax, 400)
-        print(u[puvw::dof].reshape(4, 4))
 
     elif subcase == 3:
         print('SUBCASE %d' % subcase)
@@ -975,11 +975,14 @@ for subcase in (1, 2, 3):
         kGrun = kG.copy()
 
         # boundary conditions
-        for i in [0, 1, 2, 3,
-                4, 7,
-                8, 11,
-                12, 13, 14, 15]:
+        for i in [0, 4, 8, 12]:
             for j in [0, 1, 2]:
+                k0run[nodes[i].index*dof+j, :] = 0
+                k0run[:, nodes[i].index*dof+j] = 0
+                kGrun[nodes[i].index*dof+j, :] = 0
+                kGrun[:, nodes[i].index*dof+j] = 0
+        for i in [1, 2, 3, 7, 11, 13, 14, 15]:
+            for j in [2]:
                 k0run[nodes[i].index*dof+j, :] = 0
                 k0run[:, nodes[i].index*dof+j] = 0
                 kGrun[nodes[i].index*dof+j, :] = 0
@@ -994,10 +997,11 @@ for subcase in (1, 2, 3):
         u = eigvecs[:, 0]
         wmin = u[puvw::dof].min()
         wmax = u[puvw::dof].max()
-        levels = np.linspace(wmin, wmax, 400)
-        print('eigvals', eigvals)
+        levels = np.linspace(wmin, wmax, 10)
+        print('eigvals[0]', eigvals[0])
 
         plt.contourf(xcord.reshape(4, 4), ycord.reshape(4, 4), u[puvw::dof].reshape(4, 4),
-                levels=levels)
+                levels=levels, cmap=cm.jet)
 
         plt.savefig('plot_edge_based_smoothing_domain.png', bbox_inches='tight')
+        plt.show()

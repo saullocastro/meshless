@@ -104,23 +104,20 @@ print_as_full(K, 'k0', dofpernode=5)
 sympy.var('a1, b1, c1, d1, Ac')
 
 
-Bs1Tria1 = 1/(2*Ac) * Matrix([
-         #node 1
+Tria1N1 = 1/(2*Ac) * Matrix([
   [0, 0, b1-d1, Ac,  0],
   [0, 0, c1-a1,  0, Ac]])
 
-Bs2Tria1 = 1/(2*Ac) * Matrix([
-         #node 2
+Tria1N2 = 1/(2*Ac) * Matrix([
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
-Bs3Tria1 = 1/(2*Ac) * Matrix([
-         #node 3
+Tria1N3 = 1/(2*Ac) * Matrix([
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
 
-Bs = Matrix([Bs1Tria1.T, Bs2Tria1.T, Bs3Tria1.T]).T
+Bs = Matrix([Tria1N1.T, Tria1N2.T, Tria1N3.T]).T
 
 K = Ac*Bs.transpose()*E*Bs
 print_as_full(K, 'k0s', dofpernode=5)

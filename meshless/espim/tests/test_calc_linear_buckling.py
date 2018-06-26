@@ -3,10 +3,9 @@ import inspect
 
 import numpy as np
 from scipy.sparse import coo_matrix
+from composites.laminate import read_stack
+from structsolve import solve, lb
 
-from meshless.composite.laminate import read_stack
-from meshless.sparse import solve
-from meshless.linear_buckling import lb
 from meshless.espim.read_mesh import read_mesh
 from meshless.espim.plate2d_calc_k0 import calc_k0
 from meshless.espim.plate2d_calc_kG import calc_kG

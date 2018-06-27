@@ -66,6 +66,8 @@ install_requires = [
         "coveralls",
         "pyNastran",
         "setuptools-git-version",
+        "composites",
+        "structsolve"
         ]
 
 if os.environ.get('TRAVIS') == 'true':

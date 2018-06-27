@@ -24,8 +24,6 @@ install:
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy sympy scipy matplotlib
   - source activate test-environment
   - pip install pytest
-  - pip install coveralls
-  - pip install pynastran
   - python setup.py install
 
 script:

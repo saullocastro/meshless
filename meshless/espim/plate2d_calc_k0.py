@@ -4,12 +4,30 @@ import numpy as np
 
 from ..logger import msg
 from ..constants import ZGLOBAL
-from .plate2d import IntegrationPoint, unitvec, area_of_polygon
-from .read_mesh import getMid
+from ..utils import unitvec, area_of_polygon, getMid
+from .classes import IntegrationPoint
 
 
 def calc_k0(mesh, prop_from_node, silent=True):
-    # checking inputs
+    """Calculate the constitutive stiffness matrix for a given input mesh
+
+    Parameters
+    ----------
+
+    mesh : :class:`pyNastran.bdf.BDF` object
+        The object must have the proper edge references as those returned by
+        :func:`.read_mesh` or :func:`.read_delaunay`
+
+    prop_from_node : bool
+        If the constitutive properties are assigned per node. Otherwise they
+        are considered assigned per element
+
+    Returns
+    -------
+    k0 : (N, N) array-like
+        The constitutive stiffness matrix
+
+    """
     msg('Calculating K0...', silent=silent)
     edges = mesh.edges.values()
     for edge in edges:
@@ -27,17 +45,17 @@ def calc_k0(mesh, prop_from_node, silent=True):
         if len(edge.trias) == 1:
             tria1 = edge.trias[0]
             tria2 = None
-            othernode1 = (set(tria1.nodes) - set(edge.nodes)).pop()
-            edge.othernode1 = othernode1
+            othernode_id1 = (set(tria1.node_ids) - set(edge.node_ids)).pop()
+            edge.othernode1 = mesh.nodes[othernode_id1]
             edge.othernode2 = None
             mid1 = getMid(tria1)
         elif len(edge.trias) == 2:
             tria1 = edge.trias[0]
             tria2 = edge.trias[1]
-            othernode1 = (set(tria1.nodes) - set(edge.nodes)).pop()
-            othernode2 = (set(tria2.nodes) - set(edge.nodes)).pop()
-            edge.othernode1 = othernode1
-            edge.othernode2 = othernode2
+            othernode_id1 = (set(tria1.node_ids) - set(edge.node_ids)).pop()
+            othernode_id2 = (set(tria2.node_ids) - set(edge.node_ids)).pop()
+            edge.othernode1 = mesh.nodes[othernode_id1]
+            edge.othernode2 = mesh.nodes[othernode_id2]
             mid1 = getMid(tria1)
             mid2 = getMid(tria2)
         else:
@@ -50,45 +68,44 @@ def calc_k0(mesh, prop_from_node, silent=True):
         sdomain = []
 
         # to guarantee outward normals
-        sign = 1
         if np.dot(np.cross((mid1 - node2.xyz), (node1.xyz - node2.xyz)), ZGLOBAL) < 0:
-            sign = -1
+            node1, node2 = node2, node1
 
         tmpvec = (node1.xyz - mid1)
-        nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+        nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
         sdomain.append(node1.xyz)
         sdomain.append(mid1)
         le = np.sqrt(((node1.xyz - mid1)**2).sum())
-        ipt = IntegrationPoint(tria1, node1, node2, othernode1, 2/3, 1/6, 1/6, nx, ny, nz, le)
+        ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 2/3, 1/6, 1/6, nx, ny, nz, le)
         ipts.append(ipt)
 
         tmpvec = (mid1 - node2.xyz)
-        nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+        nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
         sdomain.append(node2.xyz)
         le = np.sqrt(((mid1 - node2.xyz)**2).sum())
-        ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/6, 2/3, 1/6, nx, ny, nz, le)
+        ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 1/6, 2/3, 1/6, nx, ny, nz, le)
         ipts.append(ipt)
 
         if tria2 is None:
             tmpvec = (node2.xyz - node1.xyz)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((node2.xyz - node1.xyz)**2).sum())
-            ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/2, 1/2, 0, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 1/2, 1/2, 0, nx, ny, nz, le)
             ipts.append(ipt)
         else:
             tmpvec = (node2.xyz - mid2)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(mid2)
             le = np.sqrt(((node2.xyz - mid2)**2).sum())
-            ipt = IntegrationPoint(tria2, node1, node2, othernode2, 1/6, 2/3, 1/6, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria2, node1, node2, edge.othernode2, 1/6, 2/3, 1/6, nx, ny, nz, le)
             ipts.append(ipt)
 
             tmpvec = (mid2 - node1.xyz)
-            nx, ny, nz = unitvec(np.cross(tmpvec, sign*ZGLOBAL))
+            nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((mid2 - node1.xyz)**2).sum())
-            ipt = IntegrationPoint(tria2, node1, node2, othernode2, 2/3, 1/6, 1/6, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria2, node1, node2, edge.othernode2, 2/3, 1/6, 1/6, nx, ny, nz, le)
             ipts.append(ipt)
 
         sdomain = np.array(sdomain)
@@ -107,7 +124,7 @@ def calc_k0(mesh, prop_from_node, silent=True):
     index_ref_point = nodes_xyz.min(axis=0)
 
     index_dist = ((nodes_xyz - index_ref_point)**2).sum(axis=-1)
-    sort_ind = np.argsort(index_dist)
+    sort_ind = np.arange(len(index_dist))
     for i, node in enumerate(np.array(list(nodes))[sort_ind]):
         node.index = i
 
@@ -120,7 +137,6 @@ def calc_k0(mesh, prop_from_node, silent=True):
     for edge in edges:
         tria1 = edge.trias[0]
         Ac = edge.Ac
-        ipts = edge.ipts
         mid1 = getMid(tria1)
         tmp = np.array([mid1, edge.n2.xyz, edge.n1.xyz])
         Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
@@ -133,6 +149,7 @@ def calc_k0(mesh, prop_from_node, silent=True):
             Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
         else:
             raise RuntimeError('Found %d trias for edge' % len(edge.trias))
+        ipts = edge.ipts
         indices = set()
         for ipt in ipts:
             indices.add(ipt.n1.index)

@@ -7,6 +7,27 @@ from ..utils import area_of_polygon, getMid
 
 
 def calc_kG(d, mesh, prop_from_node, silent=True):
+    """Calculate the geometric stiffness matrix for a given input mesh
+
+    Parameters
+    ----------
+
+    d : (N) array-like
+        Result from a static analysis, are used to compute the current membrane
+        stress distribution
+    mesh : :class:`pyNastran.bdf.BDF` object
+        The object must have the proper edge references as those returned by
+        :func:`.read_mesh` or :func:`.read_delaunay`
+    prop_from_node : bool
+        If the constitutive properties are assigned per node. Otherwise they
+        are considered assigned per element
+
+    Returns
+    -------
+    kG : (N, N) array-like
+        The geometric stiffness matrix
+
+    """
     msg('Calculating KG...', silent=silent)
     dof = 5
     n = d.shape[0] // dof

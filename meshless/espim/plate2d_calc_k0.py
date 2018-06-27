@@ -9,7 +9,25 @@ from .classes import IntegrationPoint
 
 
 def calc_k0(mesh, prop_from_node, silent=True):
-    # checking inputs
+    """Calculate the constitutive stiffness matrix for a given input mesh
+
+    Parameters
+    ----------
+
+    mesh : :class:`pyNastran.bdf.BDF` object
+        The object must have the proper edge references as those returned by
+        :func:`.read_mesh` or :func:`.read_delaunay`
+
+    prop_from_node : bool
+        If the constitutive properties are assigned per node. Otherwise they
+        are considered assigned per element
+
+    Returns
+    -------
+    k0 : (N, N) array-like
+        The constitutive stiffness matrix
+
+    """
     msg('Calculating K0...', silent=silent)
     edges = mesh.edges.values()
     for edge in edges:

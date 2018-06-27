@@ -10,9 +10,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import coo_matrix
-
-from meshless.composite.laminate import read_stack
-from meshless.sparse import solve
+from composites.laminate import read_stack
+from structsolve import solve
 
 
 XGLOBAL = np.array([1., 0, 0])

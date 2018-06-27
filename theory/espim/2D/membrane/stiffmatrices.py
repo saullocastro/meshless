@@ -1,7 +1,7 @@
 import sympy
 from sympy import Matrix
 
-from pim.sympytools import print_as_sparse, print_as_array, print_as_full
+from meshless.dev.sympytools import mprint_as_dense
 
 sympy.var('u, v, w, phix, phiy')
 sympy.var('nx1, ny1')
@@ -153,6 +153,6 @@ Bm = 1/Ac * (
 
 K = Ac*Bm.transpose() * A * Bm
 
-print_as_full(sympy.simplify(K), 'k0', dofpernode=5)
+mprint_as_dense(sympy.simplify(K), 'k0', dofpernode=5)
 
 

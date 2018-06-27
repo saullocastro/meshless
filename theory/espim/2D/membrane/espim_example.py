@@ -10,9 +10,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import coo_matrix
-
-from pim.composite.laminate import read_stack
-from pim.sparse import solve, is_symmetric
+from composites.laminate import read_stack
+from structsolve import solve
+from structsolve.sparseutils import is_symmetric
 
 
 XGLOBAL = np.array([1., 0, 0])

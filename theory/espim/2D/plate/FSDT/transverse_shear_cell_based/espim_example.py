@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.sparse import coo_matrix
 from structsolve import solve, lb
-
 from composites.laminate import read_stack
 
 

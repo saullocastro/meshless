@@ -70,9 +70,6 @@ install_requires = [
         "structsolve"
         ]
 
-if os.environ.get('TRAVIS') == 'true':
-    install_requires.pop(install_requires.index("pyNastran"))
-
 CLASSIFIERS = """\
 
 Development Status :: 3 - Alpha

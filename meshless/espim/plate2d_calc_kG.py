@@ -3,8 +3,7 @@ from __future__ import absolute_import, division
 import numpy as np
 
 from ..logger import msg
-from .plate2d import area_of_polygon
-from .read_mesh import getMid
+from ..utils import area_of_polygon, getMid
 
 
 def calc_kG(d, mesh, prop_from_node, silent=True):

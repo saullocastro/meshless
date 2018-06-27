@@ -4,36 +4,7 @@ import numpy as np
 from pyNastran.bdf.bdf import read_bdf, BDF, CTRIA3, GRID
 
 from ..logger import msg
-
-
-class Edge(object):
-    def __init__(self, n1, n2):
-        self.n1 = n1
-        self.n2 = n2
-        self.nodes = [n1, n2]
-        self.node_ids = [n1.nid, n2.nid]
-        self.trias = []
-        self.sdomain = []
-        self.ipts = []
-        self.Ac = None
-        self.othernode1 = None
-        self.othernode2 = None
-
-    def __str__(self):
-        return 'Edge (%s, %s)' % (self.n1.nid, self.n2.nid)
-
-    def __repr__(self):
-        return self.__str__()
-
-    def getMid(self):
-        try:
-            return 0.5*(self.n1 + self.n2)
-        except:
-            return 0.5*(self.n1.xyz + self.n2.xyz)
-
-
-def getMid(tria):
-    return tria.get_node_positions().mean(axis=0)
+from .classes import Edge
 
 
 def read_mesh(filepath, silent=True):

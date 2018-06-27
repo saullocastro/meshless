@@ -4,8 +4,7 @@ import numpy as np
 
 from ..logger import msg
 from ..constants import ZGLOBAL
-from .plate2d import area_of_polygon
-from .read_mesh import getMid
+from ..utils import area_of_polygon, getMid
 
 dof = 5
 

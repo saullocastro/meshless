@@ -4,8 +4,8 @@ import numpy as np
 
 from ..logger import msg
 from ..constants import ZGLOBAL
-from .plate2d import IntegrationPoint, unitvec, area_of_polygon
-from .read_mesh import getMid
+from ..utils import unitvec, area_of_polygon, getMid
+from .classes import IntegrationPoint
 
 
 def calc_k0(mesh, prop_from_node, silent=True):

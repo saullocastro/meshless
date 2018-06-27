@@ -5,7 +5,7 @@ import sympy
 from sympy import collect
 
 
-def expandpow(instr):
+def pow2mult(instr):
     """Expand power to multiplications
 
     Substitutes x**5 or pow(x, 5) by x*x*x*x*x
@@ -47,9 +47,11 @@ def expandpow(instr):
     return outstr
 
 
-def print_as_sparse(m, mname, sufix=None, subs=None, header=None,
+def mprint_as_sparse(m, mname, sufix=None, subs=None, header=None,
         print_file=True, collect_for=None, pow_by_mul=True,
         full_symmetric=False):
+    """
+    """
     if sufix is None:
         left = right = '1'
         namesufix = '{0}'.format(mname)
@@ -96,7 +98,7 @@ def print_as_sparse(m, mname, sufix=None, subs=None, header=None,
                     ls.append('    {expr}'.format(expr=k*expr))
             else:
                 if pow_by_mul:
-                    v = expandpow(str(v))
+                    v = pow2mult(str(v))
                 ls.append('{mname}v[c] += {v}'.format(mname=mname, v=v))
 
     string = '\n'.join(ls)
@@ -119,7 +121,7 @@ def print_as_sparse(m, mname, sufix=None, subs=None, header=None,
     return string
 
 
-def print_as_full(m, mname, subs=None, header=None, print_file=True,
+def mprint_as_array(m, mname, subs=None, header=None, print_file=True,
         collect_for=None, pow_by_mul=True, dofpernode=None):
     namesufix = '{0}'.format(mname)
     filename = 'print_{0}.txt'.format(namesufix)
@@ -153,7 +155,7 @@ def print_as_full(m, mname, subs=None, header=None, print_file=True,
                     ls.append('    {expr}'.format(expr=k*expr))
             else:
                 if pow_by_mul:
-                    v = expandpow(str(v))
+                    v = pow2mult(str(v))
                 if dofpernode:
                     ls.append('{mname}[i{nindi}*dof+{i}, i{nindj}*dof+{j}] += {v}'.format(
                         mname=mname, i=i, j=j, v=v, nindi=nindi, nindj=nindj))

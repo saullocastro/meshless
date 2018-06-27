@@ -1,6 +1,4 @@
-- Use common solvers from the compmech/structsolve library
-- Use compmech/composites
 - Add Jupyter Notebooks with examples
+- move core of ESPIM to Cython
 - ESPIM for general 3D shell models
 - ESPIM for 3D tetrahedrons
-- move core of ESPIM to Cython

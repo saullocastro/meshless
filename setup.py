@@ -6,7 +6,7 @@ import subprocess
 from setuptools import setup, find_packages
 
 
-is_released = False
+is_released = True
 version = '0.1.25'
 
 
@@ -42,7 +42,7 @@ def get_version_info(version, is_released):
     return fullversion
 
 
-def write_version_py(version, is_released, filename='compmech/version.py'):
+def write_version_py(version, is_released, filename='meshless/version.py'):
     fullversion = get_version_info(version, is_released)
     with open("./meshless/version.py", "wb") as f:
         f.write(b'__version__ = "%s"\n' % fullversion.encode())

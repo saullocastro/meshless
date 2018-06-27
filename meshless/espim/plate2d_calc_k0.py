@@ -27,17 +27,17 @@ def calc_k0(mesh, prop_from_node, silent=True):
         if len(edge.trias) == 1:
             tria1 = edge.trias[0]
             tria2 = None
-            othernode1 = (set(tria1.nodes) - set(edge.nodes)).pop()
-            edge.othernode1 = othernode1
+            othernode_id1 = (set(tria1.node_ids) - set(edge.node_ids)).pop()
+            edge.othernode1 = mesh.nodes[othernode_id1]
             edge.othernode2 = None
             mid1 = getMid(tria1)
         elif len(edge.trias) == 2:
             tria1 = edge.trias[0]
             tria2 = edge.trias[1]
-            othernode1 = (set(tria1.nodes) - set(edge.nodes)).pop()
-            othernode2 = (set(tria2.nodes) - set(edge.nodes)).pop()
-            edge.othernode1 = othernode1
-            edge.othernode2 = othernode2
+            othernode_id1 = (set(tria1.node_ids) - set(edge.node_ids)).pop()
+            othernode_id2 = (set(tria2.node_ids) - set(edge.node_ids)).pop()
+            edge.othernode1 = mesh.nodes[othernode_id1]
+            edge.othernode2 = mesh.nodes[othernode_id2]
             mid1 = getMid(tria1)
             mid2 = getMid(tria2)
         else:
@@ -58,14 +58,14 @@ def calc_k0(mesh, prop_from_node, silent=True):
         sdomain.append(node1.xyz)
         sdomain.append(mid1)
         le = np.sqrt(((node1.xyz - mid1)**2).sum())
-        ipt = IntegrationPoint(tria1, node1, node2, othernode1, 2/3, 1/6, 1/6, nx, ny, nz, le)
+        ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 2/3, 1/6, 1/6, nx, ny, nz, le)
         ipts.append(ipt)
 
         tmpvec = (mid1 - node2.xyz)
         nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
         sdomain.append(node2.xyz)
         le = np.sqrt(((mid1 - node2.xyz)**2).sum())
-        ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/6, 2/3, 1/6, nx, ny, nz, le)
+        ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 1/6, 2/3, 1/6, nx, ny, nz, le)
         ipts.append(ipt)
 
         if tria2 is None:
@@ -73,21 +73,21 @@ def calc_k0(mesh, prop_from_node, silent=True):
             nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((node2.xyz - node1.xyz)**2).sum())
-            ipt = IntegrationPoint(tria1, node1, node2, othernode1, 1/2, 1/2, 0, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria1, node1, node2, edge.othernode1, 1/2, 1/2, 0, nx, ny, nz, le)
             ipts.append(ipt)
         else:
             tmpvec = (node2.xyz - mid2)
             nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(mid2)
             le = np.sqrt(((node2.xyz - mid2)**2).sum())
-            ipt = IntegrationPoint(tria2, node1, node2, othernode2, 1/6, 2/3, 1/6, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria2, node1, node2, edge.othernode2, 1/6, 2/3, 1/6, nx, ny, nz, le)
             ipts.append(ipt)
 
             tmpvec = (mid2 - node1.xyz)
             nx, ny, nz = unitvec(np.cross(tmpvec, ZGLOBAL))
             sdomain.append(node1.xyz)
             le = np.sqrt(((mid2 - node1.xyz)**2).sum())
-            ipt = IntegrationPoint(tria2, node1, node2, othernode2, 2/3, 1/6, 1/6, nx, ny, nz, le)
+            ipt = IntegrationPoint(tria2, node1, node2, edge.othernode2, 2/3, 1/6, 1/6, nx, ny, nz, le)
             ipts.append(ipt)
 
         sdomain = np.array(sdomain)

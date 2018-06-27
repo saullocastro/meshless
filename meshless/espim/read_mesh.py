@@ -11,6 +11,7 @@ class Edge(object):
         self.n1 = n1
         self.n2 = n2
         self.nodes = [n1, n2]
+        self.node_ids = [n1.nid, n2.nid]
         self.trias = []
         self.sdomain = []
         self.ipts = []
@@ -38,13 +39,11 @@ def getMid(tria):
 def read_mesh(filepath, silent=True):
     msg('Reading mesh...', silent=silent)
     mesh = read_bdf(filepath, debug=False)
-    nodes = []
     for node in mesh.nodes.values():
         node.trias = set()
         node.edges = set()
         node.index = set()
         node.prop = None
-        nodes.append(node)
 
     trias = []
     for elem in mesh.elements.values():
@@ -60,18 +59,20 @@ def read_mesh(filepath, silent=True):
     for tria in trias:
         for edge_id in tria.get_edge_ids():
             edges_ids[edge_id].append(tria)
+        tria.nodes = tria.nodes_ref
     for (n1, n2), e_trias in edges_ids.items():
         edge = Edge(mesh.nodes[n1], mesh.nodes[n2])
         edge.trias = e_trias
         edges[(n1, n2)] = edge
+        mesh.nodes[n1].edges.add(edge)
+        mesh.nodes[n2].edges.add(edge)
     for edge in edges.values():
         for tria in edge.trias:
             tria.edges.append(edge)
     for tria in trias:
-        for node in tria.nodes:
-            node.trias.add(tria)
-        for edge in tria.edges:
-            node.edges.add(edge)
+        for nid in tria.node_ids:
+            mesh.nodes[nid].trias.add(tria.eid)
+
     mesh.edges = edges
     msg('finished!', silent=silent)
     return mesh
@@ -86,7 +87,7 @@ def read_delaunay(points, tri, silent=True):
         if len(pt) == 2:
             pt = np.array([pt[0], pt[1], 0.])
         nid += 1
-        node = GRID(nid, 0, pt)
+        node = GRID(nid, cp=0, cd=0, xyz=pt)
         node.trias = set()
         node.edges = set()
         node.index = set()
@@ -103,6 +104,7 @@ def read_delaunay(points, tri, silent=True):
         tria = CTRIA3(eid, 0, (n1.nid, n2.nid, n3.nid))
         tria.nodes = [n1, n2, n3]
         tria.nodes_ref = tria.nodes
+        tria._node_ids(nodes=tria.nodes_ref)
         tria.edges = []
         tria.prop = None
         trias.append(tria)
@@ -116,14 +118,14 @@ def read_delaunay(points, tri, silent=True):
         edge = Edge(mesh.nodes[n1], mesh.nodes[n2])
         edge.trias = e_trias
         edges[(n1, n2)] = edge
+        mesh.nodes[n1].edges.add(edge)
+        mesh.nodes[n2].edges.add(edge)
     for edge in edges.values():
         for tria in edge.trias:
             tria.edges.append(edge)
     for tria in trias:
-        for node in tria.nodes:
-            node.trias.add(tria)
-        for edge in tria.edges:
-            node.edges.add(edge)
+        for nid in tria.node_ids:
+            mesh.nodes[nid].trias.add(tria.eid)
     mesh.edges = edges
     msg('finished!', silent=silent)
     return mesh

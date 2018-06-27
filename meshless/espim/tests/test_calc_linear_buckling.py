@@ -28,7 +28,7 @@ def test_calc_linear_buckling():
             for node in mesh.nodes.values():
                 node.prop = lam
             k0 = calc_k0(mesh, prop_from_nodes)
-            add_k0s(k0, mesh, prop_from_nodes, k0s_method)
+            add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
 
             # running static subcase first
             dof = 5

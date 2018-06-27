@@ -25,7 +25,7 @@ def test_calc_linear_static():
     for prop_from_nodes in [False, True]:
         for k0s_method in ['cell-based', 'cell-based-no-smoothing']: #, 'edge-based'
             k0 = calc_k0(mesh, prop_from_nodes)
-            add_k0s(k0, mesh, prop_from_nodes, k0s_method)
+            add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
 
             k0run = k0.copy()
 

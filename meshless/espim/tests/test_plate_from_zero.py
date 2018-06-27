@@ -76,7 +76,7 @@ def test_plate_from_zero():
 
     k0s_method = 'cell-based'
     k0 = calc_k0(mesh, prop_from_nodes)
-    add_k0s(k0, mesh, prop_from_nodes, k0s_method)
+    add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
     bc(k0, mesh)
     k0 = coo_matrix(k0)
 

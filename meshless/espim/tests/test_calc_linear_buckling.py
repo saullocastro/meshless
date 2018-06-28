@@ -3,10 +3,9 @@ import inspect
 
 import numpy as np
 from scipy.sparse import coo_matrix
+from composites.laminate import read_stack
+from structsolve import solve, lb
 
-from meshless.composite.laminate import read_stack
-from meshless.sparse import solve
-from meshless.linear_buckling import lb
 from meshless.espim.read_mesh import read_mesh
 from meshless.espim.plate2d_calc_k0 import calc_k0
 from meshless.espim.plate2d_calc_kG import calc_kG
@@ -19,8 +18,8 @@ def test_calc_linear_buckling():
     nu = 0.33
     plyt = 0.007
     lam = read_stack([0], plyt=plyt, laminaprop=(E11, E11, nu))
-    ans = {'edge-based': 7129.4416835611828, 'cell-based': 54.89025,
-            'cell-based-no-smoothing': 17.3862}
+    ans = {'edge-based': 9.4115354, 'cell-based': 6.98852939,
+            'cell-based-no-smoothing': 4.921956}
     for prop_from_nodes in [True, False]:
         for k0s_method in ['edge-based', 'cell-based', 'cell-based-no-smoothing']:
             mesh = read_mesh(os.path.join(THISDIR, 'nastran_plate_16_nodes.dat'))
@@ -29,7 +28,7 @@ def test_calc_linear_buckling():
             for node in mesh.nodes.values():
                 node.prop = lam
             k0 = calc_k0(mesh, prop_from_nodes)
-            add_k0s(k0, mesh, prop_from_nodes, k0s_method)
+            add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
 
             # running static subcase first
             dof = 5

@@ -1,7 +1,7 @@
 import sympy
 from sympy import Matrix
 
-from meshless.sympytools import print_as_sparse, print_as_array, print_as_full
+from meshless.dev.sympytools import mprint_as_dense
 
 sympy.var('nx1, ny1')
 sympy.var('nx2, ny2')
@@ -97,7 +97,7 @@ K = Ac*(Bm.transpose() * A * Bm
       + Bb.transpose() * B * Bm
       + Bb.transpose() * D * Bb)
 
-print_as_full(K, 'k0', dofpernode=5)
+mprint_as_dense(K, 'k0', dofpernode=5)
 
 # transverse shear terms
 
@@ -148,7 +148,7 @@ BsTria2 = Matrix([Tria2Bs1.T + 1/3*Tria2Bs2.T, Tria2Bs3.T + 1/3*Tria2Bs2.T,    Z
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
 
 K = Ac*Bs.transpose()*E*Bs
-print_as_full(K, 'k0s_interior_edge', dofpernode=5)
+mprint_as_dense(K, 'k0s_interior_edge', dofpernode=5)
 
 
          #mid 1
@@ -172,4 +172,4 @@ BsTria1 = Matrix([Tria1Bs2.T + 1/3*Tria1Bs1.T, Tria1Bs3.T + 1/3*Tria1Bs1.T, 1/3*
 Bs = BsTria1
 
 K = Ac*Bs.transpose()*E*Bs
-print_as_full(K, 'k0s_boundary_edge', dofpernode=5)
+mprint_as_dense(K, 'k0s_boundary_edge', dofpernode=5)

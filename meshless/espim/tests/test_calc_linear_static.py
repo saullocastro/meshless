@@ -3,9 +3,9 @@ import inspect
 
 import numpy as np
 from scipy.sparse import coo_matrix
+from composites.laminate import read_stack
+from structsolve import solve
 
-from meshless.composite.laminate import read_stack
-from meshless.sparse import solve
 from meshless.espim.read_mesh import read_mesh
 from meshless.espim.plate2d_calc_k0 import calc_k0
 from meshless.espim.plate2d_add_k0s import add_k0s
@@ -25,7 +25,7 @@ def test_calc_linear_static():
     for prop_from_nodes in [False, True]:
         for k0s_method in ['cell-based', 'cell-based-no-smoothing']: #, 'edge-based'
             k0 = calc_k0(mesh, prop_from_nodes)
-            add_k0s(k0, mesh, prop_from_nodes, k0s_method)
+            add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
 
             k0run = k0.copy()
 
@@ -48,7 +48,12 @@ def test_calc_linear_static():
             u = solve(k0run, fext, silent=True)
             ans = np.loadtxt(os.path.join(THISDIR, 'nastran_plate_16_nodes.result.txt'),
                     dtype=float)
-            assert np.allclose(u[2::5].reshape(4, 4).T, ans, rtol=0.05)
+            xyz = np.array([n.xyz for n in mesh.nodes.values()])
+            ind = np.lexsort((xyz[:, 1], xyz[:, 0]))
+            xyz = xyz[ind]
+            nodes = np.array(list(mesh.nodes.values()))[ind]
+            pick = [n.index for n in nodes]
+            assert np.allclose(u[2::5][pick].reshape(4, 4).T, ans, rtol=0.05)
 
 
 if __name__ == '__main__':

@@ -6,6 +6,10 @@ import subprocess
 from setuptools import setup, find_packages
 
 
+is_released = True
+version = '0.1.25'
+
+
 def git_version():
     def _minimal_ext_cmd(cmd):
         # construct minimal environment
@@ -38,7 +42,7 @@ def get_version_info(version, is_released):
     return fullversion
 
 
-def write_version_py(version, is_released, filename='compmech/version.py'):
+def write_version_py(version, is_released, filename='meshless/version.py'):
     fullversion = get_version_info(version, is_released)
     with open("./meshless/version.py", "wb") as f:
         f.write(b'__version__ = "%s"\n' % fullversion.encode())
@@ -62,10 +66,9 @@ install_requires = [
         "coveralls",
         "pyNastran",
         "setuptools-git-version",
+        "composites",
+        "structsolve"
         ]
-
-if os.environ.get('TRAVIS') == 'true':
-    install_requires.pop(install_requires.index("pyNastran"))
 
 CLASSIFIERS = """\
 
@@ -81,9 +84,6 @@ Programming Language :: Python :: 3.5
 Operating System :: Unix
 
 """
-
-is_released = True
-version = '0.1.19'
 
 fullversion = write_version_py(version, is_released)
 

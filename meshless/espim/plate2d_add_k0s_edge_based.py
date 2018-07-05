@@ -20,13 +20,13 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha):
     i3 = edge.othernode1.index
 
     # sub-tria 1
-    x1, y1, z1 = mid1
-    x2, y2, z2 = n1.xyz
-    x3, y3, z3 = n2.xyz
-    a1 = x2 - x1
-    b1 = y2 - y1
-    c1 = x3 - x1
-    d1 = y3 - y1
+    xmid1, ymid1, zmid1 = mid1
+    x1, y1, z1 = n1.xyz
+    x2, y2, z2 = n2.xyz
+    a1 = x1 - xmid1
+    b1 = y1 - ymid1
+    c1 = x2 - xmid1
+    d1 = y2 - ymid1
 
     if prop_from_node:
         pn1 = n1.prop
@@ -151,24 +151,24 @@ def interior_edge(k0, edge, n1, n2, prop_from_node, alpha):
     # sub-tria 1
     tmp = np.array([mid1, n1.xyz, n2.xyz])
     Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
-    x1, y1, z1 = mid1
-    x2, y2, z2 = n1.xyz
-    x3, y3, z3 = n2.xyz
-    a1 = x2 - x1
-    b1 = y2 - y1
-    c1 = x3 - x1
-    d1 = y3 - y1
+    xmid1, ymid1, z1 = mid1
+    x1, y1, y1 = n1.xyz
+    x2, y2, z2 = n2.xyz
+    a1 = x1 - xmid1
+    b1 = y1 - ymid1
+    c1 = x2 - xmid1
+    d1 = y2 - ymid1
 
     # sub-tria 2
     tmp = np.array([n1.xyz, mid2, n2.xyz])
     Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
     x1, y1, z1 = n1.xyz
-    x2, y2, z2 = mid2
-    x3, y3, z3 = n2.xyz
-    a2 = x2 - x1
-    b2 = y2 - y1
-    c2 = x3 - x1
-    d2 = y3 - y1
+    xmid2, ymid2, zmid2 = mid2
+    x2, y2, z2 = n2.xyz
+    a2 = xmid2 - x1
+    b2 = ymid2 - y1
+    c2 = x2 - x1
+    d2 = y2 - y1
 
     if prop_from_node:
         pn1 = n1.prop

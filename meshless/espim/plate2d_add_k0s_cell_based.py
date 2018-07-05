@@ -27,35 +27,35 @@ def add_k0s(k0, mesh, prop_from_node, alpha, silent=True):
         Ac = tria.get_area()
 
         # sub-tria 1
-        x1, y1, z1 = mid
+        xmid, ymid, zmid = mid
         x2, y2, z2 = n1.xyz
         x3, y3, z3 = n2.xyz
-        a1 = x2 - x1
-        b1 = y2 - y1
-        c1 = x3 - x1
-        d1 = y3 - y1
+        a1 = x2 - xmid
+        b1 = y2 - ymid
+        c1 = x3 - xmid
+        d1 = y3 - ymid
         tmp = np.array([mid, n1.xyz, n2.xyz])
         Ac1 = area_of_polygon(tmp[:, 0], tmp[:, 1])
 
         # sub-tria 2
-        x1, y1, z1 = mid
+        xmid, ymid, zmid = mid
         x2, y2, z2 = n2.xyz
         x3, y3, z3 = n3.xyz
-        a2 = x2 - x1
-        b2 = y2 - y1
-        c2 = x3 - x1
-        d2 = y3 - y1
+        a2 = x2 - xmid
+        b2 = y2 - ymid
+        c2 = x3 - xmid
+        d2 = y3 - ymid
         tmp = np.array([mid, n2.xyz, n3.xyz])
         Ac2 = area_of_polygon(tmp[:, 0], tmp[:, 1])
 
         # sub-tria 3
-        x1, y1, z1 = mid
+        xmid, ymid, zmid = mid
         x2, y2, z2 = n3.xyz
         x3, y3, z3 = n1.xyz
-        a3 = x2 - x1
-        b3 = y2 - y1
-        c3 = x3 - x1
-        d3 = y3 - y1
+        a3 = x2 - xmid
+        b3 = y2 - ymid
+        c3 = x3 - xmid
+        d3 = y3 - ymid
 
         tmp = np.array([mid, n3.xyz, n1.xyz])
         Ac3 = area_of_polygon(tmp[:, 0], tmp[:, 1])

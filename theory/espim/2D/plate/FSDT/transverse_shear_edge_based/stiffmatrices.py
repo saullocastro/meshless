@@ -108,42 +108,42 @@ sympy.var('a2, b2, c2, d2, Ac2')
 # Tria2: node1 -> mid2 -> node2
 
          #mid 1
-Tria1Bs1 = 1/(2*Ac1) * Matrix([
+Tria1Mid1 = 1/(2*Ac1) * Matrix([
   [0, 0, b1-d1, Ac1,  0],
   [0, 0, c1-a1,  0, Ac1]])
 
          #node 1
-Tria1Bs2 = 1/(2*Ac1) * Matrix([
+Tria1N1 = 1/(2*Ac1) * Matrix([
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
          #node 2
-Tria1Bs3 = 1/(2*Ac1) * Matrix([
+Tria1N2 = 1/(2*Ac1) * Matrix([
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
 
          #node 1
-Tria2Bs1 = 1/(2*Ac2) * Matrix([
+Tria2N1 = 1/(2*Ac2) * Matrix([
   [0, 0, b2-d2, Ac2,  0],
   [0, 0, c2-a2,  0, Ac2]])
 
          #mid 2
-Tria2Bs2 = 1/(2*Ac2) * Matrix([
+Tria2Mid2 = 1/(2*Ac2) * Matrix([
   [0, 0,  d2,  a2*d2/2,  b2*d2/2],
   [0, 0, -c2, -a2*c2/2, -b2*c2/2]])
 
          #node 2
-Tria2Bs3 = 1/(2*Ac2) * Matrix([
+Tria2N2 = 1/(2*Ac2) * Matrix([
   [0, 0, -b2, -b2*c2/2, -b2*d2/2],
   [0, 0,  a2,  a2*c2/2,  a2*d2/2]])
 
 
-ZERO = Tria1Bs1*0
+ZERO = Tria1Mid1*0
 
-                       #node 1               ,             node 2         ,    other 1    ,     other 2
-BsTria1 = Matrix([Tria1Bs2.T + 1/3*Tria1Bs1.T, Tria1Bs3.T + 1/3*Tria1Bs1.T, 1/3*Tria1Bs1.T,     ZERO.T    ]).T
-BsTria2 = Matrix([Tria2Bs1.T + 1/3*Tria2Bs2.T, Tria2Bs3.T + 1/3*Tria2Bs2.T,    ZERO.T     , 1/3*Tria2Bs2.T]).T
+                       #node 1               ,            node 2          ,    other 1     ,      other 2
+BsTria1 = Matrix([Tria1N1.T + 1/3*Tria1Mid1.T, Tria1N2.T + 1/3*Tria1Mid1.T, 1/3*Tria1Mid1.T,      ZERO.T    ]).T
+BsTria2 = Matrix([Tria2N1.T + 1/3*Tria2Mid2.T, Tria2N2.T + 1/3*Tria2Mid2.T,    ZERO.T      , 1/3*Tria2Mid2.T]).T
 
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
 
@@ -152,22 +152,22 @@ mprint_as_dense(K, 'k0s_interior_edge', dofpernode=5)
 
 
          #mid 1
-Tria1Bs1 = 1/(2*Ac) * Matrix([
+Tria1Mid1 = 1/(2*Ac) * Matrix([
   [0, 0, b1-d1, Ac,  0],
   [0, 0, c1-a1,  0, Ac]])
 
          #node 1
-Tria1Bs2 = 1/(2*Ac) * Matrix([
+Tria1N1 = 1/(2*Ac) * Matrix([
   [0, 0,  d1,  a1*d1/2,  b1*d1/2],
   [0, 0, -c1, -a1*c1/2, -b1*c1/2]])
 
          #node 2
-Tria1Bs3 = 1/(2*Ac) * Matrix([
+Tria1N2 = 1/(2*Ac) * Matrix([
   [0, 0, -b1, -b1*c1/2, -b1*d1/2],
   [0, 0,  a1,  a1*c1/2,  a1*d1/2]])
 
                        #node 1               ,             node 2         ,    other 1
-BsTria1 = Matrix([Tria1Bs2.T + 1/3*Tria1Bs1.T, Tria1Bs3.T + 1/3*Tria1Bs1.T, 1/3*Tria1Bs1.T]).T
+BsTria1 = Matrix([Tria1N1.T + 1/3*Tria1Mid1.T, Tria1N2.T + 1/3*Tria1Mid1.T, 1/3*Tria1Mid1.T]).T
 
 Bs = BsTria1
 

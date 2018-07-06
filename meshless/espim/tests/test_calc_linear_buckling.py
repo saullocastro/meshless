@@ -2,14 +2,14 @@ import os
 import inspect
 
 import numpy as np
-from scipy.sparse import coo_matrix
+from scipy.sparse import csr_matrix
 from composites.laminate import read_stack
 from structsolve import solve, lb
 
 from meshless.espim.read_mesh import read_mesh
-from meshless.espim.plate2d_calc_k0 import calc_k0
+from meshless.espim.plate2d_calc_kC import calc_kC
 from meshless.espim.plate2d_calc_kG import calc_kG
-from meshless.espim.plate2d_add_k0s import add_k0s
+from meshless.espim.plate2d_calc_kCs import calc_kCs
 
 THISDIR = os.path.dirname(inspect.getfile(inspect.currentframe()))
 
@@ -21,18 +21,21 @@ def test_calc_linear_buckling():
     ans = {'edge-based': 9.4115354, 'cell-based': 6.98852939,
             'cell-based-no-smoothing': 4.921956}
     for prop_from_nodes in [True, False]:
-        for k0s_method in ['edge-based', 'cell-based', 'cell-based-no-smoothing']:
+        for kCs_method in ['cell-based', 'cell-based-no-smoothing', 'edge-based']:
             mesh = read_mesh(os.path.join(THISDIR, 'nastran_plate_16_nodes.dat'))
             for tria in mesh.elements.values():
                 tria.prop = lam
             for node in mesh.nodes.values():
                 node.prop = lam
-            k0 = calc_k0(mesh, prop_from_nodes)
-            add_k0s(k0, mesh, prop_from_nodes, k0s_method, alpha=0.2)
+            kC = calc_kC(mesh, prop_from_nodes)
+            kC = csr_matrix(kC)
+            kCs = calc_kCs(mesh, prop_from_nodes, kCs_method, alpha=0.2)
+            kCs = csr_matrix(kCs)
+            kC += kCs
 
             # running static subcase first
             dof = 5
-            n = k0.shape[0] // 5
+            n = kC.shape[0] // 5
             fext = np.zeros(n*dof, dtype=np.float64)
             fext[mesh.nodes[4].index*dof + 0] = -500.
             fext[mesh.nodes[7].index*dof + 0] = -500.
@@ -51,17 +54,16 @@ def test_calc_linear_buckling():
                         K[mesh.nodes[i].index*dof+j, :] = 0
                         K[:, mesh.nodes[i].index*dof+j] = 0
 
-            bc(k0)
-            k0 = coo_matrix(k0)
-            d = solve(k0, fext, silent=True)
+            bc(kC)
+            d = solve(kC, fext, silent=True)
             kG = calc_kG(d, mesh, prop_from_nodes)
+            kG = csr_matrix(kG)
             bc(kG)
-            kG = coo_matrix(kG)
 
-            eigvals, eigvecs = lb(k0, kG, silent=True)
-            print('k0s_method, eigvals[0]', k0s_method, eigvals[0])
+            eigvals, eigvecs = lb(kC, kG, silent=True)
+            print('kCs_method, eigvals[0]', kCs_method, eigvals[0])
 
-            assert np.isclose(eigvals[0], ans[k0s_method])
+            assert np.isclose(eigvals[0], ans[kCs_method])
 
 if __name__ == '__main__':
     test_calc_linear_buckling()

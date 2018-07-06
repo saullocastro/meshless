@@ -1,8 +1,8 @@
-from meshless.espim.plate2d_add_k0s_cell_based import add_k0s as add_k0s_cell
-from meshless.espim.plate2d_add_k0s_cell_based_no_smoothing import add_k0s as add_k0s_cell_no_smoothing
-from meshless.espim.plate2d_add_k0s_edge_based import add_k0s as add_k0s_edge
+from meshless.espim.plate2d_calc_kCs_cell_based import calc_kCs as calc_kCs_cell
+from meshless.espim.plate2d_calc_kCs_cell_based_no_smoothing import calc_kCs as calc_kCs_cell_no_smoothing
+from meshless.espim.plate2d_calc_kCs_edge_based import calc_kCs as calc_kCs_edge
 
-def add_k0s(k0, mesh, prop_from_node, method='cell-based', alpha=0.08):
+def calc_kCs(mesh, prop_from_node, method='cell-based', alpha=0.08):
     """Add the transverse shear stiffness to an existing consitutive stiffness
     matrix
 
@@ -32,11 +32,11 @@ def add_k0s(k0, mesh, prop_from_node, method='cell-based', alpha=0.08):
     """
     #alpha between 0. and 0.6, according to studies of Lyly et al.
     if method == 'cell-based':
-        return add_k0s_cell(k0, mesh, prop_from_node, alpha=alpha)
+        return calc_kCs_cell(mesh, prop_from_node, alpha=alpha)
     elif method == 'cell-based-no-smoothing':
-        return add_k0s_cell_no_smoothing(k0, mesh, prop_from_node, alpha=alpha)
+        return calc_kCs_cell_no_smoothing(mesh, prop_from_node, alpha=alpha)
     elif method == 'edge-based':
-        return add_k0s_edge(k0, mesh, prop_from_node, alpha=alpha)
+        return calc_kCs_edge(mesh, prop_from_node, alpha=alpha)
     else:
         raise ValueError('Invalid method')
 

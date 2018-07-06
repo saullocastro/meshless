@@ -1,7 +1,7 @@
 import sympy
 from sympy import Matrix
 
-from meshless.dev.sympytools import mprint_as_dense
+from meshless.dev.sympytools import mprint_as_dense, mprint_as_sparse
 
 sympy.var('nx1, ny1')
 sympy.var('nx2, ny2')
@@ -92,12 +92,13 @@ Bb = 1/Ac * (
    )
 
 
-K = Ac*(Bm.transpose() * A * Bm
+kC = Ac*(Bm.transpose() * A * Bm
       + Bm.transpose() * B * Bb
       + Bb.transpose() * B * Bm
       + Bb.transpose() * D * Bb)
 
-mprint_as_dense(K, 'k0', dofpernode=5)
+mprint_as_dense(kC, 'kC', dofpernode=5)
+mprint_as_sparse(kC, 'kC', sufix='sparse', dofpernode=5, is_symmetric=False)
 
 # transverse shear terms
 
@@ -147,8 +148,9 @@ BsTria2 = Matrix([Tria2N1.T + 1/3*Tria2Mid2.T, Tria2N2.T + 1/3*Tria2Mid2.T,    Z
 
 Bs = 1/Ac*(Ac1*BsTria1 + Ac2*BsTria2)
 
-K = Ac*Bs.transpose()*E*Bs
-mprint_as_dense(K, 'k0s_interior_edge', dofpernode=5)
+kCs = Ac*Bs.transpose()*E*Bs
+mprint_as_dense(kCs, 'kCs', dofpernode=5)
+mprint_as_sparse(kCs, 'kCs', sufix='sparse', dofpernode=5, is_symmetric=False)
 
 
          #mid 1
@@ -171,5 +173,6 @@ BsTria1 = Matrix([Tria1N1.T + 1/3*Tria1Mid1.T, Tria1N2.T + 1/3*Tria1Mid1.T, 1/3*
 
 Bs = BsTria1
 
-K = Ac*Bs.transpose()*E*Bs
-mprint_as_dense(K, 'k0s_boundary_edge', dofpernode=5)
+kCs = Ac*Bs.transpose()*E*Bs
+mprint_as_dense(kCs, 'kCs_boundary_edge', dofpernode=5)
+mprint_as_sparse(kCs, 'kCs_boundary_edge', sufix='sparse', dofpernode=5, is_symmetric=False)

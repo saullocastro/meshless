@@ -4,10 +4,13 @@ import os
 import inspect
 import subprocess
 from setuptools import setup, find_packages
+from distutils.extension import Extension
 
+from Cython.Build import cythonize
+import numpy as np
 
-is_released = True
-version = '0.1.25'
+is_released = False
+version = '0.1.30'
 
 
 def git_version():
@@ -97,6 +100,48 @@ package_data = {
         '': ['tests/*.*'],
         }
 
+if os.name == 'nt':
+    compile_args = ['/openmp', '/O2']
+    link_args = []
+else:
+    compile_args = ['-fopenmp', '-static', '-static-libgcc', '-static-libstdc++']
+    link_args = ['-fopenmp', '-static-libgcc', '-static-libstdc++']
+
+include_dirs = [
+            np.get_include(),
+            ]
+
+extensions = [
+    Extension('meshless.espim.plate2d_calc_kC',
+        sources=[
+            './meshless/espim/plate2d_calc_kC.pyx',
+            ],
+        include_dirs=include_dirs, extra_compile_args=compile_args, extra_link_args=link_args, language='c++'),
+    Extension('meshless.espim.plate2d_calc_kG',
+        sources=[
+            './meshless/espim/plate2d_calc_kG.pyx',
+            ],
+        include_dirs=include_dirs, extra_compile_args=compile_args, extra_link_args=link_args, language='c++'),
+    Extension('meshless.espim.plate2d_calc_kCs_cell_based',
+        sources=[
+            './meshless/espim/plate2d_calc_kCs_cell_based.pyx',
+            ],
+        include_dirs=include_dirs, extra_compile_args=compile_args, extra_link_args=link_args, language='c++'),
+    Extension('meshless.espim.plate2d_calc_kCs_cell_based_no_smoothing',
+        sources=[
+            './meshless/espim/plate2d_calc_kCs_cell_based_no_smoothing.pyx',
+            ],
+        include_dirs=include_dirs, extra_compile_args=compile_args, extra_link_args=link_args, language='c++'),
+    Extension('meshless.espim.plate2d_calc_kCs_edge_based',
+        sources=[
+            './meshless/espim/plate2d_calc_kCs_edge_based.pyx',
+            ],
+        include_dirs=include_dirs, extra_compile_args=compile_args, extra_link_args=link_args, language='c++'),
+    ]
+ext_modules = cythonize(extensions)
+for e in ext_modules:
+    e.cython_directives = {'embedsignature': True}
+
 s = setup(
     name = "meshless",
     version = fullversion,
@@ -112,5 +157,6 @@ s = setup(
     long_description=read('README.md'),
     classifiers=[_f for _f in CLASSIFIERS.split('\n') if _f],
     install_requires=install_requires,
+    ext_modules = ext_modules,
 )
 

@@ -9,7 +9,7 @@ from ..utils import area_of_polygon, getMid
 dof = 5
 
 
-def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha):
+def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha, maxl_from_area):
     # sub-tria1: mid1 -> node1 -> node2
     tria1 = edge.trias[0]
     mid1 = getMid(tria1)
@@ -43,13 +43,18 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha):
         h = tria1.prop.h
 
     E44 = k13 * E[0, 0]
-    E45 = min(k13, k23) * E[0, 1]
+    E45 = 0 # min(k13, k23) * E[0, 1]
     E55 = k23 * E[1, 1]
 
-    maxl = max([ipt.le for ipt in edge.ipts])
-    E44 = h**2 / (h**2 + alpha*maxl**2) * E44
-    E45 = h**2 / (h**2 + alpha*maxl**2) * E45
-    E55 = h**2 / (h**2 + alpha*maxl**2) * E55
+    if maxl_from_area:
+        maxl = Ac**0.5
+    else:
+        maxl = max([ipt.le for ipt in edge.ipts])
+
+    factor = alpha*maxl**2/h**2
+    E44 = 1 / (1 + factor) * E44
+    # E45 = 1 / (1 + factor) * E45
+    E55 = 1 / (1 + factor) * E55
 
     k0[i1*dof+2, i1*dof+2] += (-c1/(2*Ac) + 0.166666666666667*(-a1 + c1)/Ac)*(Ac*E45*(d1/(2*Ac) + 0.166666666666667*(b1 - d1)/Ac) + Ac*E55*(-c1/(2*Ac) + 0.166666666666667*(-a1 + c1)/Ac)) + (d1/(2*Ac) + 0.166666666666667*(b1 - d1)/Ac)*(Ac*E44*(d1/(2*Ac) + 0.166666666666667*(b1 - d1)/Ac) + Ac*E45*(-c1/(2*Ac) + 0.166666666666667*(-a1 + c1)/Ac))
     k0[i1*dof+2, i1*dof+3] += (0.166666666666667 + a1*d1/(4*Ac))*(Ac*E44*(d1/(2*Ac) + 0.166666666666667*(b1 - d1)/Ac) + Ac*E45*(-c1/(2*Ac) + 0.166666666666667*(-a1 + c1)/Ac)) - a1*c1*(Ac*E45*(d1/(2*Ac) + 0.166666666666667*(b1 - d1)/Ac) + Ac*E55*(-c1/(2*Ac) + 0.166666666666667*(-a1 + c1)/Ac))/(4*Ac)
@@ -134,7 +139,7 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha):
     k0[i3*dof+4, i3*dof+4] += 0.0277777777777778*Ac*E55
 
 
-def interior_edge(k0, edge, n1, n2, prop_from_node, alpha):
+def interior_edge(k0, edge, n1, n2, prop_from_node, alpha, maxl_from_area):
     # sub-tria1: mid1 -> node1 -> node2
     # sub-tria2: node1 -> mid2 -> node2
     tria1 = edge.trias[0]
@@ -192,7 +197,11 @@ def interior_edge(k0, edge, n1, n2, prop_from_node, alpha):
     E45 = min(k13, k23) * E[0, 1]
     E55 = k23 * E[1, 1]
 
-    maxl = max(max([ipt.le for ipt in edge.ipts]), np.sum((edge.n1.xyz - edge.n2.xyz)**2)**0.5)
+    if maxl_from_area:
+        maxl = Ac**0.5
+    else:
+        maxl = max(max([ipt.le for ipt in edge.ipts]), np.sum((edge.n1.xyz - edge.n2.xyz)**2)**0.5)
+
     E44 = h**2 / (h**2 + alpha*maxl**2) * E44
     E45 = h**2 / (h**2 + alpha*maxl**2) * E45
     E55 = h**2 / (h**2 + alpha*maxl**2) * E55
@@ -343,7 +352,7 @@ def interior_edge(k0, edge, n1, n2, prop_from_node, alpha):
     k0[i4*dof+4, i4*dof+4] += -0.0833333333333333*b2*c2*(0.0833333333333333*E45*b2*d2 - 0.0833333333333333*E55*b2*c2)/Ac + 0.0833333333333333*b2*d2*(0.0833333333333333*E44*b2*d2 - 0.0833333333333333*E45*b2*c2)/Ac
 
 
-def add_k0s(k0, mesh, prop_from_node, alpha, silent=True):
+def add_k0s(k0, mesh, prop_from_node, alpha, maxl_from_area, silent=True):
     msg('Adding K0s to K0...', silent=silent)
     for edge in mesh.edges.values():
         n1 = edge.n1
@@ -352,9 +361,9 @@ def add_k0s(k0, mesh, prop_from_node, alpha, silent=True):
         if np.dot(np.cross((n2.xyz - n1.xyz), (mid1 - n1.xyz)), ZGLOBAL) < 0:
             n2, n1 = n1, n2
         if len(edge.trias) == 1:
-            boundary_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha)
+            boundary_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha, maxl_from_area=maxl_from_area)
         elif len(edge.trias) == 2:
-            interior_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha)
+            interior_edge(k0, edge, n1, n2, prop_from_node, alpha=alpha, maxl_from_area=maxl_from_area)
         else:
             raise NotImplementedError('')
 

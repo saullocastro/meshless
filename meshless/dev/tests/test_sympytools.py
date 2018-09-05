@@ -26,7 +26,7 @@ test_mv[c] += 2*xvar + (yvar*yvar*yvar)
 """
     res1 = res1.strip()
     mprint_as_sparse(m, 'test_m', print_file=False) == res1
-    mprint_as_sparse(m, 'test_m', print_file=False, full_symmetric=True) == res1
+    mprint_as_sparse(m, 'test_m', print_file=False, is_symmetric=True) == res1
 
     res2 = """
 # test_m

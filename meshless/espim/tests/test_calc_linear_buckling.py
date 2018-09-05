@@ -18,7 +18,7 @@ def test_calc_linear_buckling():
     nu = 0.33
     plyt = 0.007
     lam = read_stack([0], plyt=plyt, laminaprop=(E11, E11, nu))
-    ans = {'edge-based': 9.4115354, 'cell-based': 6.98852939,
+    ans = {'edge-based': 41.85273, 'cell-based': 6.98852939,
             'cell-based-no-smoothing': 4.921956}
     for prop_from_nodes in [True, False]:
         for k0s_method in ['edge-based', 'cell-based', 'cell-based-no-smoothing']:

@@ -42,9 +42,9 @@ def boundary_edge(k0, edge, n1, n2, prop_from_node, alpha, maxl_from_area):
         E = tria1.prop.E
         h = tria1.prop.h
 
-    E44 = k13 * E[0, 0]
+    E44 = k23 * E[0, 0]
     E45 = 0 # min(k13, k23) * E[0, 1]
-    E55 = k23 * E[1, 1]
+    E55 = k13 * E[1, 1]
 
     if maxl_from_area:
         maxl = Ac**0.5

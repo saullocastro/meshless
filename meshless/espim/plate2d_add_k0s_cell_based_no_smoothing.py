@@ -41,9 +41,9 @@ def add_k0s(k0, mesh, prop_from_node, alpha, maxl_from_area, silent=True):
             E = tria.prop.E
             h = tria.prop.h
 
-        E44 = k13 * E[0, 0]
+        E44 = k23 * E[0, 0]
         E45 = 0 # min(k13, k23) * E[0, 1]
-        E55 = k23 * E[1, 1]
+        E55 = k13 * E[1, 1]
 
         if maxl_from_area:
             maxl = Ac**0.5
